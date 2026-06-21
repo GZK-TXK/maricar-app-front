@@ -1,6 +1,6 @@
 import React from 'react'
 
-const LoginPages = () => {
+const CarContainer = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const LoginPages = () => {
   )
 }
 
-export default LoginPages
+export default CarContainer

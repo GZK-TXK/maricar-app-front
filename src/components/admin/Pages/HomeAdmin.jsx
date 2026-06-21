@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ResgisterPages = () => {
+const HomeAdmin = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const ResgisterPages = () => {
   )
 }
 
-export default ResgisterPages
+export default HomeAdmin

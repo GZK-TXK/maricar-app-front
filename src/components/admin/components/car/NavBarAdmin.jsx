@@ -1,6 +1,6 @@
 import React from 'react'
 
-const HomePages = () => {
+const NavBarAdmin = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const HomePages = () => {
   )
 }
 
-export default HomePages
+export default NavBarAdmin
