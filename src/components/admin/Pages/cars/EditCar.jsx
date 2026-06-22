@@ -1,7 +1,10 @@
 import React from 'react'
+import { useParams } from 'react-router'
 
 export const EditCar = () => {
-  return (
-    <div>EditCar</div>
-  )
+    const { id } = useParams()
+
+    return (
+        <div>EditCar - ID: {id}</div>
+    )
 }

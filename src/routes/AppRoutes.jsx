@@ -8,7 +8,7 @@ export const AppRoutes = () => {
   return (
     <Routes>
         <Route path='/' element= {<HomeAdmin/>}/>
-        <Route path='/editcar' element= {<EditCar/>}/>
+        <Route path='/editcar/:id' element= {<EditCar/>}/>
         <Route path='/createcar' element= {<CreateCar/>}/>
         <Route path='/admincars' element= {<AdminCars/>}/>
         <Route path='/users' element= {<GestionUsuarios/>}/>
