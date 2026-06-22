@@ -1,19 +1,20 @@
 import React from 'react'
+import useForm from '../../hooks/useForm'
 
-const EditCarForm = () => {
-
+export const editCarForm = () => {
+    const {formulario, handleSubmit, handleChange, enviado} = useForm({})
+    const getCar = {};
+        
     // Traer los datos de la bbdd del coche con ese id
+    
     //devolverá el obj coche
 
-    const handleSubmit= ()=>{
         // recoger los datos del forulario
 
-        //llamar a al endpoint a trave sde fetch
+        //llamar a al endpoint a traves de fetch
 
         //gestionar la respuesta la API
 
-    }
-        
  
 
     return (
@@ -25,8 +26,8 @@ const EditCarForm = () => {
                     target="_self"
                     autocomplete="off"
                     novalidate
-                    id="createCarForm"
-                    name="createCarForm"
+                    id="editCarForm"
+                    name="editarCarForm"
                     accept-charset="UTF-8"
                     onsubmit={handleSubmit}
                     rel="noopener noreferrer">
@@ -55,4 +56,3 @@ const EditCarForm = () => {
     )
 }
 
-export default CreateCarForm

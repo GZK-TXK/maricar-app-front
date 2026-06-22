@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export const useForm = (initialObject = {}) => {
+export const useForm = (initialObject=null) => {
   const [formulario, setFormulario] = useState(initialObject)
 
   const [enviado, setEnviado] = useState(false)
@@ -18,23 +18,13 @@ export const useForm = (initialObject = {}) => {
   const handleSubmit = (ev) => {
     ev.preventDefault()
     const form = ev.target;
-    let car= serializarFormulario(ev.target)
+    let car= serializarFormulario(form)
     setFormulario(car)
-    setEnviado(true)
   }
-//manejar cambios 
-  const handleChange = (e)=>{
-    const [name,value] = e.target.value
-    setFormulario({
-      ...formulario,
-      [name]: value
-    })
-  }
+
   return {
     formulario,
-    handleSubmit,
-    handleChange,
-    enviado
+    handleSubmit
   }
 }
 

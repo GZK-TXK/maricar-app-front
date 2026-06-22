@@ -1,11 +1,7 @@
 import React from 'react'
 
-const HomeAdmin = () => {
+export const HomeAdmin = () => {
   return (
-    <div>
-      
-    </div>
+    <div>HomeAdmin</div>
   )
 }
-
-export default HomeAdmin

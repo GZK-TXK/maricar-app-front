@@ -1,11 +1,16 @@
 import React from 'react'
+import { NavLink } from 'react-router'
 
-const NavBarAdmin = () => {
+export const NavBarAdmin = () => {
   return (
-    <div>
-      
-    </div>
+    <nav>
+      <ul>
+        <li>
+          <NavLink to='/admincars'>Coches</NavLink>
+          <NavLink to='/'>HomeAdmin</NavLink>
+          <NavLink to='/users'>Usuarios</NavLink>          
+        </li>
+      </ul>
+          </nav>
   )
 }
-
-export default NavBarAdmin
