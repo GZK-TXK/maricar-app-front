@@ -5,7 +5,7 @@ import { CarContainer } from '../../components/car/CarContainer'
 export const AdminCars = () => {
   return (
     <>
-      <Link to='/createcar'>añadir maricoche</Link>
+      <Link to='/admin/cars/create'>añadir maricoche</Link>
       <CarContainer/>
     </>
   )

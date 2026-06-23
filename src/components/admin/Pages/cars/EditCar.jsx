@@ -10,9 +10,6 @@ export const EditCar = () => {
         <>
         <div>EditCar - ID: {id}</div>
         <EditCarForm id= {id}/>
-        
-        
-        </>
-        
+        </>        
     )
 }

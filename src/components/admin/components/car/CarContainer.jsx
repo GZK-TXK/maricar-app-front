@@ -16,7 +16,7 @@ export const CarContainer = () => {
   return (
     <>
     {isLoading ? (
-      <p>Cargando coches...</p>
+      <p>Cargando Mari-coches</p>
     ) : (
       data.data.map((car) => (
         <div key={car._id}>

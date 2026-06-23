@@ -55,33 +55,33 @@ export const CreateCarForm = () => {
                     onSubmit={handleSubmit}
                     rel="noopener noreferrer">
                     <div>
-                        <label htmlFor="brand">Marca:</label>
+                        <label htmlFor="brand">MariMarca:</label>
                         <input type="text" id="brand" name="brand" placeholder="Introducir la marca." ></input>
                     </div>
                     <div>
-                        <label htmlFor="model">Model</label>
+                        <label htmlFor="model">MariModel</label>
                         <input type="text" id="model" name="model" placeholder="Introducir el modelo."></input>
                     </div>
                     <div>
-                        <label htmlFor="category">Categoria:</label>
+                        <label htmlFor="category">MariCategoria:</label>
                         <select id="category" name="category">
-                            <option value="turism">Turismo</option>
-                            <option value="van">Furgoneta</option>
-                            <option value="special">Especial</option>
+                            <option value="turism">Turismari</option>
+                            <option value="van">MariFurgo</option>
+                            <option value="special">Mariconchi</option>
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="plate">Matricula:</label>
+                        <label htmlFor="plate">MariMatricula:</label>
                         <input type="text" id="plate" name="plate" placeholder="Introducir la matricula."></input>
 
                     </div>
                     <div>
-                        <label htmlFor="pricePerDay">Precio por dia:</label>
+                        <label htmlFor="pricePerDay">MariPrecio por dia:</label>
                         <input type="number" id="pricePerDay" name="pricePerDay" placeholder="Introducir precio por dia."></input>
 
                     </div>
                     <div>
-                        <p>Disponibilidad:</p>
+                        <p>Mari, esta disponible el maricoche?</p>
                         <label htmlFor="available">Si</label>
                         <input type="checkbox" id="available-yes" name="Yes" placeholder="Si" value="yes"></input>
                         <label htmlFor="available">No</label>

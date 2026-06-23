@@ -19,11 +19,11 @@ export const CardCar = ({car}) => {
     return (
         <>
             <h3>{car.brand} {car.model}</h3>
-            <p>Matrícula: {car.plate}</p>
-            <p>Categoría: {car.category}</p>
-            <p>Precio: {car.pricePerDay}€ / día</p>
-            <p>Disponible: {car.available === true ? "Sí" : "No"}</p>
-            <Link to={`/editcar/${car._id}`}>Editar</Link>
+            <p>Mari-Matrícula: {car.plate}</p>
+            <p>Mari-Categoría: {car.category}</p>
+            <p>Mari-Precio: {car.pricePerDay}€ / día</p>
+            <p>Mari, esta Disponible? {car.available === true ? "Sí" : "No"}</p>
+            <Link to={`/admin/cars/${car._id}/edit`}>Editar</Link>
             <button title= "Eliminar" onClick={handleDeleteCar} >Eliminar</button>
         </>
     )

@@ -6,9 +6,9 @@ export const NavBarAdmin = () => {
     <nav>
       <ul>
         <li>
-          <NavLink to='/admincars'>Coches</NavLink>
-          <NavLink to='/'>HomeAdmin</NavLink>
-          <NavLink to='/users'>Usuarios</NavLink>          
+          <NavLink to='/admin/cars'>Coches</NavLink>
+          <NavLink to='/admin'>HomeAdmin</NavLink>
+          <NavLink to='/admin/users'>Usuarios</NavLink>          
         </li>
       </ul>
           </nav>
