@@ -56,11 +56,11 @@ export const CreateCarForm = () => {
                     rel="noopener noreferrer">
                     <div>
                         <label htmlFor="brand">Marca:</label>
-                        <input type="text" id="brand" name="brand" placeholder="Introducir la marca." onChange={handleChange}></input>
+                        <input type="text" id="brand" name="brand" placeholder="Introducir la marca." ></input>
                     </div>
                     <div>
                         <label htmlFor="model">Model</label>
-                        <input type="text" id="model" name="model" placeholder="Introducir el modelo." onChange={handleChange}></input>
+                        <input type="text" id="model" name="model" placeholder="Introducir el modelo."></input>
                     </div>
                     <div>
                         <label htmlFor="category">Categoria:</label>
@@ -72,20 +72,20 @@ export const CreateCarForm = () => {
                     </div>
                     <div>
                         <label htmlFor="plate">Matricula:</label>
-                        <input type="text" id="plate" name="plate" placeholder="Introducir la matricula." onChange={handleChange}></input>
+                        <input type="text" id="plate" name="plate" placeholder="Introducir la matricula."></input>
 
                     </div>
                     <div>
                         <label htmlFor="pricePerDay">Precio por dia:</label>
-                        <input type="number" id="pricePerDay" name="pricePerDay" placeholder="Introducir precio por dia." onChange={handleChange}></input>
+                        <input type="number" id="pricePerDay" name="pricePerDay" placeholder="Introducir precio por dia."></input>
 
                     </div>
                     <div>
                         <p>Disponibilidad:</p>
                         <label htmlFor="available">Si</label>
-                        <input type="checkbox" id="available-yes" name="Yes" placeholder="Si" value="yes" onChange={handleChange}></input>
+                        <input type="checkbox" id="available-yes" name="Yes" placeholder="Si" value="yes"></input>
                         <label htmlFor="available">No</label>
-                        <input type="checkbox" id="available-no" name="No" placeholder="No" value="no" onChange={handleChange}></input>
+                        <input type="checkbox" id="available-no" name="No" placeholder="No" value="no"></input>
                     </div>
                     <input type="submit" value="Guardar"></input>
                 </form>

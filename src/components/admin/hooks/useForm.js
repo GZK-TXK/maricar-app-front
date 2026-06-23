@@ -22,9 +22,21 @@ export const useForm = (initialObject=null) => {
     setFormulario(car)
   }
 
+  //manejar change para editar cars
+  const handleChange = (ev) =>{
+    const {name,value,type,checked}= ev.target;
+    setFormulario({
+      ...formulario,
+      [name]: type === 'checkbox' ? checked : value
+    })
+  }
+
   return {
     formulario,
-    handleSubmit
+    handleSubmit,
+    handleChange,
+    setFormulario,
+    enviado
   }
 }
 

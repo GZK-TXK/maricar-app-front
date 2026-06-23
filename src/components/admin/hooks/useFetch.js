@@ -6,18 +6,23 @@ export const useFetch = () => {
     const [error, setError] = useState(null)
 
     const getData = async (url,options={}) => {
-        
-            const resp = await fetch(url,options)
-            if (!resp.ok) {
-                setData({})
-                setIsLoading(false)
-                setError(error)
-            } else {
-                const data = await resp.json()
-                setData(data)
-                setIsLoading(false)
-                setError(null)
+            try{
+                const resp= await fetch(url, options)
+                const result= await resp.json()
+                if(!resp.ok){
+                    setData({})
+                    setError(result)
+                    setIsLoading(false)
+                } else{
+                    setData(result)
+                    setError(null)
+                    setIsLoading(false)
+                }
             }
+            catch(error){
+                setData({})
+                setError(error.message)
+            } 
         }
     return {
         getData,

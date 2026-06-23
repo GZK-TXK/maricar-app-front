@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router'
 import { useFetch } from '../../hooks/useFetch'
+import { CardCar } from './CardCar'
 
 export const CarContainer = () => {
   const { getData, data, isLoading, error } = useFetch()
@@ -10,24 +11,19 @@ export const CarContainer = () => {
   }
   useEffect(() => {
     llamadaApi()
-  }, [])
+  }, [data])
 
   return (
-    <>{isLoading ? (
+    <>
+    {isLoading ? (
       <p>Cargando coches...</p>
     ) : (
-      data?.data?.map((car) => (
+      data.data.map((car) => (
         <div key={car._id}>
-          <h3>{car.brand} {car.model}</h3>
-          <p>Matrícula: {car.plate}</p>
-          <p>Categoría: {car.category}</p>
-          <p>Precio: {car.pricePerDay}€ / día</p>
-          <p>Disponible: {car.available === true ? "Sí" : "No"}</p>
-          <Link to={`/editcar/${car._id}`}>Editar</Link>
+         <CardCar car={car} />
         </div>
       ))
     )}
-
     </>
     //<p>{JSON.stringify(data)}</p>
   )
