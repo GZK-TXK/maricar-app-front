@@ -2,6 +2,8 @@ import React from 'react'
 
 export const GestionUsuarios = () => {
   return (
-    <div>GestionUsuarios</div>
+    <main className="main-content">
+      <div>GestionUsuarios</div>
+    </main>
   )
 }
