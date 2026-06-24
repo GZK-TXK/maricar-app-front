@@ -1,7 +1,11 @@
 import React from 'react'
+import { NavBarAdmin } from '../components/car/NavBarAdmin'
 
 export const HomeAdmin = () => {
   return (
-    <div>HomeAdmin</div>
+    <>
+    <h2>HomeAdmin</h2>
+    </>
+    
   )
 }

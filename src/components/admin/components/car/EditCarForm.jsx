@@ -1,25 +1,28 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useForm } from '../../hooks/useForm';
 import { useFetch } from '../../hooks/useFetch'
+import { useNavigate } from 'react-router';
 
 export const EditCarForm = ({id}) => {
 const {formulario, handleSubmit, handleChange, setFormulario, enviado} = useForm({})
 // Traer los datos de la bbdd del coche con ese id
 const {getData, isLoading, error, data}=useFetch()
+const isLoaded = useRef(false)
     const getCar = async ()=>{
         const url= import.meta.env.VITE_API_URLBASE;
         await getData(`${url}/cars/${id}`)        
     }
+const navigate= useNavigate()
     //devolverá el obj coche
     useEffect(() => {
       getCar(id)    
     }, [])
     // recoger los datos del forulario
-    useEffect(()=>{
-        if(data?.data){
-            setFormulario(data.data)
-        }
-    },[data]) 
+useEffect(() => {
+    if (data?.data) {
+        setFormulario(data.data)
+    }
+}, [data])
     //llamar a al endpoint a traves de fetch
     const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE
@@ -34,6 +37,7 @@ const {getData, isLoading, error, data}=useFetch()
     const handleFormSubmit= (ev)=>{
         ev.preventDefault()
         llamadaApi()
+        navigate('/admin/cars')
     }
         return (
         <>

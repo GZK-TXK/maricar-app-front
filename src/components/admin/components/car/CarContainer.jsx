@@ -9,21 +9,37 @@ export const CarContainer = () => {
     const url = import.meta.env.VITE_API_URLBASE
     await getData(`${url}/cars`)
   }
-  useEffect(() => {
-    llamadaApi()
-  }, [data])
 
+
+  useEffect(() => {
+      llamadaApi()    
+  }, [])
+  const onDelete =()=>{
+    llamadaApi()
+  }
   return (
     <>
-    {isLoading ? (
-      <p>Cargando Mari-coches</p>
-    ) : (
-      data.data.map((car) => (
-        <div key={car._id}>
-         <CardCar car={car} />
-        </div>
-      ))
-    )}
+      {isLoading ?
+        (
+          <p>Cargando Mari-coches</p>
+        )
+        :
+        error
+          ?
+          (
+            <pre>ERROR: {JSON.stringify(error)}</pre>
+          )
+          :
+          (
+            data.data.map((car) => (
+              <div key={car._id}>
+                <CardCar car={car} onDelete={onDelete} />
+              </div>
+            ))
+          )
+
+
+      }
     </>
     //<p>{JSON.stringify(data)}</p>
   )

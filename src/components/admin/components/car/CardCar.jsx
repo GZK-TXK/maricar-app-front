@@ -1,30 +1,44 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { useFetch } from '../../hooks/useFetch'
+import Swal from 'sweetalert2'
 
-export const CardCar = ({car}) => {
-    const {getData}= useFetch()
-    const llamadaApi = async ()=>{
+export const CardCar = ({ car, onDelete }) => {
+    const { getData } = useFetch()
+    const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE
         const options = {
             method: "DELETE",
             body: JSON.stringify(car),
-            headers: {"Content-Type": "application/json"}
+            headers: { "Content-Type": "application/json" }
         }
         await getData(`${apiUrlBase}/cars/${car._id}`, options)
     }
-    const handleDeleteCar= (ev)=>{
-        llamadaApi()
+    const handleDeleteCar = async (ev) => {
+        const result = await Swal.fire({
+            title: 'Mari, que te cargas el coche',
+            text: 'El coche se eliminará permanentemente',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Mejor no.'
+        })
+
+        if (result.isConfirmed) {
+            await llamadaApi()
+            onDelete()
+            Swal.fire('Eliminado', 'Hasta luego Maricoche', 'success')
+        }
     }
     return (
         <>
             <h3>{car.brand} {car.model}</h3>
-            <p>Mari-Matrícula: {car.plate}</p>
-            <p>Mari-Categoría: {car.category}</p>
-            <p>Mari-Precio: {car.pricePerDay}€ / día</p>
-            <p>Mari, esta Disponible? {car.available === true ? "Sí" : "No"}</p>
-            <Link to={`/admin/cars/${car._id}/edit`}>Editar</Link>
-            <button title= "Eliminar" onClick={handleDeleteCar} >Eliminar</button>
+            <p>Matrícula: {car.plate}</p>
+            <p>Categoría: {car.category}</p>
+            <p>Precio: {car.pricePerDay}€ / día</p>
+            <p>¿Esta Disponible? {car.available === true ? "Sí" : "No"}</p>
+            <Link to={`/admin/cars/${car._id}`}>Editar</Link>
+            <button title="Eliminar" onClick={handleDeleteCar} >Eliminar</button>
         </>
     )
 }

@@ -1,9 +1,11 @@
 import react, { useEffect, useState } from 'react'
 import { useForm } from '../../hooks/useForm'
 import { useFetch } from '../../hooks/useFetch'
+import { useNavigate } from 'react-router'
 
 export const CreateCarForm = () => {
-    const { formulario, handleSubmit, handleChange, enviado } = useForm() //valores iniciales del formulario
+    const navigate= useNavigate()
+    const { formulario, handleSubmit, handleChange, enviado, setFormulario } = useForm() //valores iniciales del formulario
     const {
         getData,
         data,
@@ -16,8 +18,8 @@ export const CreateCarForm = () => {
         //TODO: llamar a la api pasandole los datos del formulario
         const apiUrlBase = import.meta.env.VITE_API_URLBASE;
         const options = {
-            method: "POST", // or 'PUT'
-            body: JSON.stringify(formulario), // data can be `string` or {object}!
+            method: "POST",
+            body: JSON.stringify(formulario),
             headers: {
                 "Content-Type": "application/json",
             }
@@ -29,8 +31,14 @@ export const CreateCarForm = () => {
         if (formulario) {
             llamadaApi()
         }
-
+        
     }, [formulario])
+    useEffect(()=>{
+        if(data?.ok){
+        setFormulario(null)
+        navigate('/admin/cars')
+    }
+},[data])
 
     return (
         <>
@@ -55,37 +63,35 @@ export const CreateCarForm = () => {
                     onSubmit={handleSubmit}
                     rel="noopener noreferrer">
                     <div>
-                        <label htmlFor="brand">MariMarca:</label>
+                        <label htmlFor="brand">Marca:</label>
                         <input type="text" id="brand" name="brand" placeholder="Introducir la marca." ></input>
                     </div>
                     <div>
-                        <label htmlFor="model">MariModel</label>
+                        <label htmlFor="model">Model</label>
                         <input type="text" id="model" name="model" placeholder="Introducir el modelo."></input>
                     </div>
                     <div>
-                        <label htmlFor="category">MariCategoria:</label>
+                        <label htmlFor="category">Categoria:</label>
                         <select id="category" name="category">
-                            <option value="turism">Turismari</option>
-                            <option value="van">MariFurgo</option>
-                            <option value="special">Mariconchi</option>
+                            <option value="turism">Turismo</option>
+                            <option value="van">Furgo</option>
+                            <option value="special">Caravana</option>
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="plate">MariMatricula:</label>
+                        <label htmlFor="plate">Matricula:</label>
                         <input type="text" id="plate" name="plate" placeholder="Introducir la matricula."></input>
 
                     </div>
                     <div>
-                        <label htmlFor="pricePerDay">MariPrecio por dia:</label>
+                        <label htmlFor="pricePerDay">Precio por dia:</label>
                         <input type="number" id="pricePerDay" name="pricePerDay" placeholder="Introducir precio por dia."></input>
 
                     </div>
                     <div>
-                        <p>Mari, esta disponible el maricoche?</p>
+                        <p>¿Esta disponible el coche?</p>
                         <label htmlFor="available">Si</label>
-                        <input type="checkbox" id="available-yes" name="Yes" placeholder="Si" value="yes"></input>
-                        <label htmlFor="available">No</label>
-                        <input type="checkbox" id="available-no" name="No" placeholder="No" value="no"></input>
+                        <input type="checkbox" id="available" name="available" placeholder="Disponible" value="true"></input>
                     </div>
                     <input type="submit" value="Guardar"></input>
                 </form>
