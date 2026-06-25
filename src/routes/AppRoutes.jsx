@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router'
 import { HomeAdmin, EditCar, CreateCar, AdminCars, GestionUsuarios } from '../components/admin/Pages' //archivo de barril desde index.js
 import { HomePage } from '../components/public/Pages/HomePage'
 import { Cars } from '../components/public/Pages/Cars'
+import { Login } from '../components/public/Pages/Login'
 
 
 export const AppRoutes = () => {
@@ -11,6 +12,7 @@ export const AppRoutes = () => {
       {/*PUBLIC*/}
       <Route path='/' element={<HomePage />} />
       <Route path='/cars' element={<Cars />} />
+      <Route path='/login' element={<Login />} />
 
        {/*ADMIN*/}
       <Route path='/admin' element={<HomeAdmin />} />

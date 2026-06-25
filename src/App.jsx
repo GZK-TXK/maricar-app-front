@@ -8,11 +8,11 @@ import { NavBarPublic } from './components/public/Components/NavBarPublic.jsx'
 
 export const App = () => {
   const [count, setCount] = useState(0)
-  const location= useLocation()
+  const location = useLocation()
   return (
-        <>
+    <>
       <h2>MariCar App</h2>
-      <NavBarPublic/>
+      <NavBarPublic />
       <AppRoutes />
     </>
   )
