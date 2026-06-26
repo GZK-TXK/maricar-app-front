@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.scss'
 import { AppRoutes } from './routes/AppRoutes.jsx'
 import { useLocation } from 'react-router'
-import { NavBarPublic } from './components/public/Components/NavBarPublic.jsx'
+import { NavBarPublic } from './components/public/components/NavBarPublic.jsx'
 
 
 

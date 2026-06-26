@@ -1,5 +1,5 @@
 import React from 'react'
-import { PublicCarContainer } from '../Components/PublicCarContainer'
+import { PublicCarContainer } from '../components/PublicCarContainer'
 
 export const HomePage = () => {
   return (

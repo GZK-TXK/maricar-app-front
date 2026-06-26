@@ -1,12 +1,12 @@
 import React from 'react'
 import { Route, Router, Routes } from 'react-router'
-import { HomeAdmin, EditCar, CreateCar, AdminCars, GestionUsuarios } from '../components/admin/Pages' //archivo de barril desde index.js
-import { HomePage } from '../components/public/Pages/HomePage'
-import { Cars } from '../components/public/Pages/Cars'
+import { HomeAdmin, EditCar, CreateCar, AdminCars, GestionUsuarios } from '../components/admin/pages' //archivo de barril
+import { HomePage } from '../components/public/pages/HomePage'
+import { Cars } from '../components/public/pages/Cars'
 import { Login } from '../Login'
 import { AuthProvider } from '../AuthContext'
 import {PrivateRoute} from '../PrivateRoute'
-import { Dashboard } from '../components/user/Pages/Dashboard'
+import { Dashboard } from '../components/user/pages/Dashboard'
 
 
 export const AppRoutes = () => {
