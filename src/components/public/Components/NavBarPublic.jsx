@@ -11,7 +11,8 @@ export const NavBarPublic = () => {
                     <li>
                         <NavLink to='/'>Home</NavLink>
                         <NavLink to='/cars'>Coches</NavLink>
-                        <NavLink to='/Login'>Login</NavLink>
+                        <NavLink to='/login'>Login</NavLink>
+                        
                     </li>
                 </ul>
 
