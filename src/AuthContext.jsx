@@ -40,6 +40,18 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
     };
 
+    const setAuthFromToken = (token) => {
+        try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            localStorage.setItem("token", token);
+            setToken(token);
+            setUser(payload);
+            setIsAuthenticated(true);
+        } catch {
+            localStorage.removeItem("token");
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem("token");
         setToken(null);
@@ -48,7 +60,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ user, token, isAuthenticated, login, logout, setAuthFromToken }}>
             {children}
         </AuthContext.Provider>
     );

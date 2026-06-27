@@ -8,7 +8,7 @@ export const Register = () => {
         birthday: "", phone: "", direction: ""
     })
     const [error, setError] = useState("")
-    const { login } = useAuth()
+    const { login, setAuthFromToken } = useAuth()
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -31,7 +31,7 @@ export const Register = () => {
                 throw new Error(data.msg)
             }
 
-            localStorage.setItem("token", data.data.token)
+            setAuthFromToken(data.data.token)
             navigate("/dashboard")
         } catch (err) {
             setError(err.message)
