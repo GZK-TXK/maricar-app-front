@@ -39,8 +39,8 @@ export const Register = () => {
     }
 
     return (
-        <>
-            <h1>Crear cuenta</h1>
+        <div style={{ border: "1px solid #ccc", padding: 16, margin: "10px 0" }}>
+            <h3>Crear cuenta</h3>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} required />
@@ -50,9 +50,10 @@ export const Register = () => {
                 <input name="birthday" type="date" value={form.birthday} onChange={handleChange} required />
                 <input name="phone" type="number" placeholder="Teléfono" value={form.phone} onChange={handleChange} required />
                 <input name="direction" placeholder="Dirección" value={form.direction} onChange={handleChange} />
+                <br />
                 <button type="submit">Registrarse</button>
             </form>
             <p>¿Ya tienes cuenta? <NavLink to="/login">Iniciar sesión</NavLink></p>
-        </>
+        </div>
     )
 }

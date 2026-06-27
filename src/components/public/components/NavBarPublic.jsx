@@ -31,7 +31,7 @@ export const NavBarPublic = () => {
             {isAuthenticated && (
                 <ul>
                     <li>
-                        <NavLink to='/user/'>Mi perfil</NavLink>
+                        <NavLink to='/dashboard'>Mi perfil</NavLink>
                         <NavLink to='/cars/'>Coches</NavLink>
                         <NavLink to={`/${user?.id}/reservation`}>Mis Reservas</NavLink>
                         <button onClick={logout}>Cerrar sesión</button>

@@ -7,6 +7,8 @@ import { Login } from '../Login'
 import { PrivateRoute } from '../PrivateRoute'
 import { Dashboard } from '../components/user/pages/Dashboard'
 import { Register } from '../components/public/pages/Register'
+import { CarDetail } from '../components/public/pages/CarDetail'
+import { ContactForm } from '../components/public/pages/ContactForm'
 
 
 export const AppRoutes = () => {
@@ -17,6 +19,8 @@ export const AppRoutes = () => {
         <Route path='/cars' element={<Cars />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/car/:id" element={<CarDetail />} />
+        <Route path="/reservar/:carId" element={<PrivateRoute><ContactForm /></PrivateRoute>} />
         <Route
           path="/dashboard"
           element={
