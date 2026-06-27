@@ -42,8 +42,6 @@ useEffect(() => {
         return (
         <>
         {isLoading && <p>Cargando coche.</p>}
-        {<pre>FORMULARIO: {JSON.stringify(formulario)}</pre>}
-        {<pre>FORMULARIO: {JSON.stringify(data)}</pre>}
             <div>
                 <form
                     action=""

@@ -13,7 +13,7 @@ export const Login = () => {
         setError("");
         try{
             await login(email, password);
-            navigate("dashboard");
+            navigate("/dashboard");
         }catch(error){
             setError(error.message)
         }

@@ -1,9 +1,10 @@
-import React from 'react';
 import { Navigate } from 'react-router';
 import { useAuth } from './AuthContext';
 
-export const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+export const PrivateRoute = ({ children, adminOnly = false }) => {
+  const { isAuthenticated, user } = useAuth();
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  if (!isAuthenticated) return <Navigate to="/login" />;
+  if (adminOnly && user?.role !== "admin") return <Navigate to="/" />
+  return children
 };

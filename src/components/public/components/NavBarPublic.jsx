@@ -1,22 +1,23 @@
-import React from 'react'
 import { NavLink } from 'react-router'
+import { useAuth } from '../../../AuthContext'
 
 export const NavBarPublic = () => {
+    const { user, isAuthenticated, logout } = useAuth()
+
     return (
-        <>
-            <nav className='NavBarPublic'>
+        <nav className='NavBarPublic'>
+            {/* SECCIÓN PÚBLICA — siempre visible */}
+            <ul>
+                <li>
+                    <NavLink to='/'>Home</NavLink>
+                    <NavLink to='/cars'>Coches</NavLink>
+                    {!isAuthenticated && <NavLink to='/login'>Login</NavLink>}
+                    {!isAuthenticated && <NavLink to='/register'>Registro</NavLink>}
+                </li>
+            </ul>
 
-                {/*PUBLI*/}
-                <ul>
-                    <li>
-                        <NavLink to='/'>Home</NavLink>
-                        <NavLink to='/cars'>Coches</NavLink>
-                        <NavLink to='/login'>Login</NavLink>
-                        
-                    </li>
-                </ul>
-
-                {/*ADMIN*/}
+            {/* SECCIÓN ADMIN — solo si role === "admin" */}
+            {isAuthenticated && user?.role === "admin" && (
                 <ul>
                     <li>
                         <NavLink to='/admin'>HomeAdmin</NavLink>
@@ -24,18 +25,19 @@ export const NavBarPublic = () => {
                         <NavLink to='/admin/users'>Usuarios</NavLink>
                     </li>
                 </ul>
+            )}
 
-                {/*USER*/}
+            {/* SECCIÓN USER — solo si está logueado */}
+            {isAuthenticated && (
                 <ul>
                     <li>
-                        <NavLink to='/user/'>Mi perfil</NavLink>      
-                        <NavLink to='/cars/'>Coches</NavLink>                
-                        <NavLink to='/${user}/reservation'>Mis Reservas</NavLink>
+                        <NavLink to='/user/'>Mi perfil</NavLink>
+                        <NavLink to='/cars/'>Coches</NavLink>
+                        <NavLink to={`/${user?.id}/reservation`}>Mis Reservas</NavLink>
+                        <button onClick={logout}>Cerrar sesión</button>
                     </li>
                 </ul>
-            </nav>
-        </>
+            )}
+        </nav>
     )
 }
-
-//<NavLink to='/login'>Login</NavLink>
