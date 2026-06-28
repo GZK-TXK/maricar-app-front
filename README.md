@@ -45,9 +45,10 @@ La aplicacion se divide en dos proyectos independientes:
 
 ### Publicas
 
-- Catalogo de vehiculos con listado completo.
-- Detalle de vehiculo con calendario de disponibilidad.
-- Formulario de contacto con envio de correo electronico.
+- Pagina de inicio con imagen de bienvenida (`welcome.png`).
+- Catalogo de vehiculos con listado completo en tarjetas horizontales.
+- Detalle de vehiculo con foto, datos y calendario de disponibilidad (flatpickr).
+- Formulario de contacto/reserva con envio de correo electronico (Ethereal).
 - Registro e inicio de sesion de usuarios.
 
 ### Autenticacion
@@ -59,21 +60,27 @@ La aplicacion se divide en dos proyectos independientes:
 
 ### Administrador
 
-- CRUD completo de vehiculos (crear, leer, actualizar, eliminar).
-- Subida de imagenes por cada vehiculo.
-- Gestion de disponibilidad por rangos de fechas.
+- CRUD completo de vehiculos (crear, listar, editar, eliminar).
+- Subida de imagenes con multer (5MB max, solo jpg/png/gif/webp).
+- Gestion de disponibilidad por rangos de fechas con flatpickr (anadir/eliminar).
 - CRUD completo de usuarios.
+- Edicion de contrasena con hash bcrypt (incluso via `findByIdAndUpdate`).
 
 ### Usuario
 
-- Panel de usuario con informacion personal.
-- Avatar generado automaticamente.
-- Visualizacion de reservas (pendiente de implementacion).
+- Panel de usuario con informacion personal y avatar (ui-avatars.com).
+- Visualizacion de reservas (pendiente de implementacion, actualmente muestra "Aun no tienes reservas").
+- Boton de cerrar sesion.
 
 ## Estructura del Proyecto
 
 ```
 maricar-app/
+  docs/
+    documentacion-tecnica.pdf   Documentacion detallada para la presentacion
+    presentacion-guion.pdf      Guion de presentacion (10 min)
+    ppt/
+      MariCar-Presentacion.pptx Presentacion PowerPoint
   maricar-app-back/
     src/
       controllers/     Logica de negocio
@@ -83,7 +90,9 @@ maricar-app/
       app.js            Punto de entrada del servidor
     uploads/            Imagenes subidas (efimero en Render)
   maricar-app-front/
-    public/             Archivos estaticos
+    public/
+      logo.png          Logo de la aplicacion (redirige a home)
+      welcome.png       Imagen de bienvenida en la pagina de inicio
     src/
       components/
         admin/          Componentes del panel de administracion
@@ -91,7 +100,7 @@ maricar-app/
         user/           Componentes del panel de usuario
       routes/           Configuracion de rutas
       styles/           Archivos Sass (variables, mixins)
-      App.jsx           Componente principal
+      App.jsx           Componente principal (header con logo + NavLink)
       AuthContext.jsx   Contexto de autenticacion
 ```
 
@@ -223,3 +232,6 @@ La aplicacion se abrira en `http://localhost:5173`.
 - El envio de correos se realiza mediante Ethereal, un servicio de correo ficticio para desarrollo. Los mensajes no se entregan realmente, pero se puede acceder a una previsualizacion desde la consola del servidor.
 - Los estilos se escriben con Sass utilizando los parciales `_variables.scss` y `_mixins.scss`, importados mediante la directiva `@use`.
 - El calendario de disponibilidad utiliza flatpickr en modo rango, deshabilitando las fechas ocupadas definidas en cada vehiculo.
+- El logo en el header redirige a la pagina principal mediante `<NavLink to="/">`.
+- Al editar un usuario, si se modifica la contrasena, se hashea manualmente con bcrypt antes de llamar a `findByIdAndUpdate` (porque este metodo no ejecuta el hook `pre("save")` de Mongoose).
+- Las tarjetas de coches usan un layout horizontal (`.card-horizontal`) con imagen a la izquierda y contenido a la derecha, adaptable a movil con el mixin `responsive(md)`.
