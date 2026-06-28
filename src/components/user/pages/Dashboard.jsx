@@ -28,8 +28,7 @@ export const Dashboard = () => {
 
                     <h2>Tus reservas</h2>
                     <div className="card">
-                        <p>Aquí podrás ver y gestionar tus reservas próximamente.</p>
-                        <p>Si has realizado una reserva, recibirás un email de confirmación con los detalles.</p>
+                        <p>Aún no tienes reservas.</p>
                     </div>
                 </>
             )}

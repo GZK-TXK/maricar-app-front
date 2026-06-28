@@ -32,7 +32,6 @@ export const NavBarPublic = () => {
                 <ul>
                     <li>
                         <NavLink to='/dashboard'>Mi perfil</NavLink>
-                        <NavLink to={`/${user?.id}/reservation`}>Mis reservas</NavLink>
                         <button onClick={logout}>Cerrar sesión</button>
                     </li>
                 </ul>
