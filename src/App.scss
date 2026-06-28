@@ -264,3 +264,55 @@ a {
     height: 128px;
     object-fit: cover;
 }
+
+// RESPONSIVE
+@include responsive(md) {
+    header {
+        flex-direction: column;
+        padding: $spacing-md;
+        gap: $spacing-sm;
+
+        .logo {
+            height: 36px;
+        }
+
+        nav {
+            width: 100%;
+            flex-wrap: wrap;
+
+            ul {
+                gap: $spacing-xs;
+            }
+
+            ul + ul::before {
+                margin-right: $spacing-xs;
+            }
+
+            a, span {
+                font-size: $font-size-xs;
+                padding: $spacing-xs $spacing-sm;
+            }
+        }
+    }
+
+    .card-horizontal {
+        flex-direction: column;
+
+        .card-image {
+            width: 100%;
+            max-height: 200px;
+        }
+
+        .card-content {
+            padding: $spacing-md;
+        }
+
+        .card-avatar {
+            margin: $spacing-md auto 0;
+        }
+    }
+
+    .main-content {
+        padding: $spacing-md;
+    }
+}
