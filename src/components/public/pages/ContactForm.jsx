@@ -44,14 +44,22 @@ export const ContactForm = () => {
     return (
         <>
             <h1>Reservar {car.brand} {car.model}</h1>
-            <img src={imgUrl} alt={car.brand} className="card-image-lg" />
-            <p>Precio: {car.pricePerDay}€/día</p>
+            <div className="card-horizontal">
+                <img src={imgUrl} alt={car.brand} className="card-image" />
+                <div className="card-content">
+                    <h3>{car.brand} {car.model}</h3>
+                    <p>Precio: {car.pricePerDay}€/día</p>
+                    <p>Matrícula: {car.plate}</p>
+                    <p>Categoría: {car.category}</p>
+                    <p>Disponible: {car.available ? "Sí" : "No"}</p>
+                </div>
+            </div>
 
             <form onSubmit={handleSubmit}>
                 <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} required />
                 <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
                 <input name="phone" type="tel" placeholder="Teléfono" value={form.phone} onChange={handleChange} required />
-                <textarea name="message" placeholder="Mensaje (opcional)" value={form.message} onChange={handleChange} />
+                <textarea name="message" placeholder="Indica las fechas que deseas reservar" value={form.message} onChange={handleChange} required />
                 <button type="submit">Enviar solicitud</button>
             </form>
         </>

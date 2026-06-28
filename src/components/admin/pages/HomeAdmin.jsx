@@ -1,6 +1,5 @@
 import React from 'react'
-import { NavBarAdmin } from '../components/car/NavBarAdmin'
-import { Link, Navigate, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 
 export const HomeAdmin = () => {
 
@@ -27,13 +26,6 @@ export const HomeAdmin = () => {
            onClick={()=> handleCar('users')}
         >
           User
-        </button>
-
-        
-        <button
-          onClick={handleCar}
-        >
-          Cars
         </button>
 
       </div>

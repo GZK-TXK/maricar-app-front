@@ -33,7 +33,7 @@ export const Dashboard = () => {
                     </div>
                 </>
             )}
-            <button onClick={handleLogout}>Cerrar sesión</button>
+            <button className="btn-accent" onClick={handleLogout}>Cerrar sesión</button>
         </main>
     )
 }

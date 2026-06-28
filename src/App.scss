@@ -178,9 +178,11 @@ nav {
 
 .card-image-lg {
     width: 100%;
-    max-height: 300px;
-    object-fit: cover;
+    max-width: 500px;
+    max-height: 250px;
+    object-fit: contain;
     border-radius: $radius-md;
+    background: $color-bg;
 }
 
 // FORMULARIOS
@@ -236,6 +238,12 @@ button.btn-secondary {
     background: $color-secondary;
 }
 
+button.btn-primary {
+    background: $color-primary;
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-sm;
+}
+
 button.btn-accent {
     background: $color-accent;
     color: #0f172a;
@@ -248,6 +256,22 @@ a {
 
     &:hover {
         text-decoration: underline;
+    }
+}
+
+// AVAILABILITY SECTION
+.availability-section {
+    text-align: center;
+    margin: $spacing-lg 0;
+
+    input {
+        max-width: 320px;
+        margin: 0 auto;
+        display: block;
+    }
+
+    button {
+        margin-top: $spacing-sm;
     }
 }
 

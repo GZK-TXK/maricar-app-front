@@ -43,15 +43,24 @@ export const CarDetail = () => {
     return (
         <>
             <h1>{car.brand} {car.model}</h1>
-            <img src={imgUrl} alt={car.brand} className="card-image-lg" />
-            <p>Precio: {car.pricePerDay}€/día | Categoría: {car.category}</p>
+            <div className="card-horizontal">
+                <img src={imgUrl} alt={car.brand} className="card-image" />
+                <div className="card-content">
+                    <h3>{car.brand} {car.model}</h3>
+                    <p>Precio: {car.pricePerDay}€/día</p>
+                    <p>Matrícula: {car.plate}</p>
+                    <p>Categoría: {car.category}</p>
+                    <p>Disponible: {car.available ? "Sí" : "No"}</p>
+                </div>
+            </div>
 
-            <h3>Disponibilidad</h3>
-            <p>Las fechas en rojo están ocupadas</p>
-            <input ref={calendarRef} placeholder="Ver disponibilidad" readOnly />
-
-            <br /><br />
-            <button onClick={() => navigate(`/reservar/${car._id}`)}>Reservar</button>
+            <div className="availability-section">
+                <h3>Disponibilidad</h3>
+                <p>Las fechas en rojo están ocupadas</p>
+                <input ref={calendarRef} placeholder="Ver disponibilidad" readOnly />
+                <br /><br />
+                <button className="btn-primary" onClick={() => navigate(`/reservar/${car._id}`)}>Reservar</button>
+            </div>
         </>
     )
 }
