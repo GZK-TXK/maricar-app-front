@@ -22,7 +22,7 @@ export const Login = () => {
     return (
         <>
             <h1>Iniciar sesión</h1>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p className="error-text">{error}</p>}
             <form onSubmit={handleLogin}>
                 <div>
                     <label>Email:</label>

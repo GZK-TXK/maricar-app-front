@@ -1,113 +1,266 @@
-@use './styles/variables' as *;  
+@use './styles/variables' as *;
+@use './styles/mixins' as *;
 
-@mixin flex-center {
-    display: flex;
-    justify-content: center;
-}
-
-$primary-color: #365098;
-//HEADER
+// HEADER
 header {
-  background: $primary-color;
-  color: white;
-  padding: 1rem 2rem;
-  @include flex-center;
-}
-
-//NAVBAR
-nav {
-  background: $primary-color;
-  padding: 1rem;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    @include flex-center;
-    gap: 4rem;
-  }
-
-  a {
-    color: #e94560;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 0.5rem 1rem;  
-
-    &:hover {
-      background: rgba(101, 95, 95, 0.2);
-      border-radius: 4px;
-    }
-  }
-}
-
-//CONTENEDOR PRINCIPAL
-.main-content {
-  flex: 1;
-  padding: 2rem;
-  max-width: 1000px;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  text-align: center;  
-}
-
-//CARDS
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-  margin-bottom: 1rem;
-}
-
-//FORMULARIOS
-form {
-  max-width: 500px;
-  margin: 0 auto;
-
-  label {
-    display: block;
-    margin: 1rem 0 0.5rem;
-    font-weight: bold;
-  }
-
-  input, select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
+    background: $color-primary-dark;
+    color: $color-text-heading;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    padding: $spacing-md $spacing-xl;
     box-sizing: border-box;
-  }
+    display: flex;
+    align-items: center;
 
-  input[type="submit"] {
-    background: $primary-color;
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    margin-top: 1.5rem;
-    cursor: pointer;
-    font-weight: bold;
-
-    &:hover {
-      opacity: 0.9;
+    .logo {
+        height: 48px;
+        width: auto;
+        flex-shrink: 0;
     }
-  }
+
+    // NAVBAR dentro del header
+    nav {
+        background: transparent;
+        padding: 0;
+        border-bottom: none;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: $spacing-sm;
+
+        ul {
+            @include flex-center;
+            gap: $spacing-md;
+            flex-wrap: wrap;
+            padding: 0;
+            margin: 0;
+        }
+
+        // Divisores entre secciones del menú
+        ul + ul::before {
+            content: "|";
+            color: rgba(255, 255, 255, 0.3);
+            margin-right: $spacing-sm;
+        }
+
+        a,
+        span {
+            color: $color-text-heading;
+            font-size: $font-size-sm;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.15);
+                color: white;
+            }
+        }
+
+        button {
+            background: $color-accent;
+            color: #0f172a;
+
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+    }
 }
 
-//BOTONES
-button {
-  background: #a855f7;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
+// NAVBAR (standalone, sin header)
+nav {
+    background: $color-bg-card;
+    padding: $spacing-sm $spacing-md;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    border-bottom: 2px solid $color-primary;
 
-  &:hover {
-    opacity: 0.9;
-  }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        @include flex-center;
+        gap: $spacing-lg;
+        flex-wrap: wrap;
+    }
+
+    a,
+    span {
+        color: $color-text;
+        text-decoration: none;
+        font-weight: 600;
+        padding: $spacing-xs $spacing-md;
+        border-radius: $radius-sm;
+        transition: background 0.2s, color 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            background: $color-primary;
+            color: white;
+        }
+    }
+
+    button {
+        background: $color-accent;
+        color: #0f172a;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+}
+
+// CONTENEDOR PRINCIPAL
+.main-content {
+    @include container;
+    text-align: center;
+    flex: 1;
+}
+
+// CARDS
+.card {
+    @include card-base;
+    margin-bottom: $spacing-md;
+}
+
+.card-image {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: $radius-sm $radius-sm 0 0;
+}
+
+.card-horizontal {
+    display: flex;
+    gap: $spacing-lg;
+    align-items: flex-start;
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    overflow: hidden;
+    margin-bottom: $spacing-md;
+
+    .card-image {
+        width: 200px;
+        min-height: 150px;
+        max-height: none;
+        border-radius: 0;
+        flex-shrink: 0;
+    }
+
+    .card-content {
+        flex: 1;
+        padding: $spacing-md $spacing-md $spacing-md 0;
+        text-align: left;
+
+        h3 {
+            margin: 0 0 $spacing-sm;
+            color: $color-text-heading;
+        }
+
+        p {
+            margin: $spacing-xs 0;
+        }
+
+        .card-actions {
+            margin-top: $spacing-sm;
+            text-align: right;
+        }
+    }
+
+    .card-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        margin: $spacing-md;
+        flex-shrink: 0;
+    }
+}
+
+.card-image-lg {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: $radius-md;
+}
+
+// FORMULARIOS
+form {
+    max-width: 500px;
+    margin: 0 auto;
+
+    label {
+        display: block;
+        margin: $spacing-md 0 $spacing-sm;
+        font-weight: bold;
+        color: $color-text-heading;
+    }
+
+    input,
+    select,
+    textarea {
+        @include input-base;
+        margin-bottom: $spacing-sm;
+    }
+
+    textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+
+    input[type="submit"] {
+        @include button-base;
+        margin-top: $spacing-lg;
+        width: 100%;
+    }
+}
+
+.form-container {
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: $spacing-lg;
+    margin: $spacing-sm 0;
+    background: $color-bg-card;
+}
+
+// BOTONES
+button {
+    @include button-base;
+    margin: $spacing-xs;
+}
+
+button.btn-danger {
+    background: $color-danger;
+}
+
+button.btn-secondary {
+    background: $color-secondary;
+}
+
+button.btn-accent {
+    background: $color-accent;
+    color: #0f172a;
+}
+
+// ENLACES
+a {
+    color: $color-secondary;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// ERRORES
+.error-text {
+    color: $color-danger;
+    font-weight: bold;
+}
+
+// AVATAR
+.avatar {
+    border-radius: 50%;
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
 }

@@ -1,8 +1,9 @@
-import { Link } from 'react-router'
+import { useNavigate } from 'react-router'
 import { useFetch } from '../../hooks/useFetch'
 import Swal from 'sweetalert2'
 
 export const CardCar = ({ car, onDelete }) => {
+    const navigate = useNavigate()
     const { getData } = useFetch()
     const API_BASE = import.meta.env.VITE_API_URLBASE.replace("/api/v1", "")
     const imgUrl = car.imageUrl
@@ -11,10 +12,10 @@ export const CardCar = ({ car, onDelete }) => {
 
     const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE
+        const token = localStorage.getItem("token")
         const options = {
             method: "DELETE",
-            body: JSON.stringify(car),
-            headers: { "Content-Type": "application/json" }
+            headers: { Authorization: `Bearer ${token}` }
         }
         await getData(`${apiUrlBase}/cars/${car._id}`, options)
     }
@@ -35,15 +36,19 @@ export const CardCar = ({ car, onDelete }) => {
         }
     }
     return (
-        <>
-            <img src={imgUrl} alt={car.brand} style={{ width: "100%", maxHeight: 150, objectFit: "cover" }} />
-            <h3>{car.brand} {car.model}</h3>
-            <p>Matrícula: {car.plate}</p>
-            <p>Categoría: {car.category}</p>
-            <p>Precio: {car.pricePerDay}€ / día</p>
-            <p>¿Esta Disponible? {car.available ? "Sí" : "No"}</p>
-            <Link to={`/admin/cars/${car._id}`}>Editar</Link>
-            <button title="Eliminar" onClick={handleDeleteCar}>Eliminar</button>
-        </>
+        <div className="card-horizontal">
+            <img src={imgUrl} alt={car.brand} className="card-image" />
+            <div className="card-content">
+                <h3>{car.brand} {car.model}</h3>
+                <p>Matrícula: {car.plate}</p>
+                <p>Categoría: {car.category}</p>
+                <p>Precio: {car.pricePerDay}€ / día</p>
+                <p>¿Esta Disponible? {car.available ? "Sí" : "No"}</p>
+                <div className="card-actions">
+                    <button className="btn-accent" onClick={() => navigate(`/admin/cars/${car._id}`)}>Editar</button>
+                    <button title="Eliminar" className="btn-danger" onClick={handleDeleteCar}>Eliminar</button>
+                </div>
+            </div>
+        </div>
     )
 }

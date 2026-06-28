@@ -18,11 +18,19 @@ export const Dashboard = () => {
         <main className="main-content">
             {user && (
                 <>
-                    <img src={avatarUrl} alt={user.name} style={{ borderRadius: "50%", width: 128, height: 128 }} />
+                    <img src={avatarUrl} alt={user.name} className="avatar" />
                     <h1>Panel de Usuario</h1>
                     <p>Bienvenido, {user.name}</p>
                     <p>Email: {user.email}</p>
                     <p>Rol: {user.role}</p>
+
+                    <hr />
+
+                    <h2>Tus reservas</h2>
+                    <div className="card">
+                        <p>Aquí podrás ver y gestionar tus reservas próximamente.</p>
+                        <p>Si has realizado una reserva, recibirás un email de confirmación con los detalles.</p>
+                    </div>
                 </>
             )}
             <button onClick={handleLogout}>Cerrar sesión</button>

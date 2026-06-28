@@ -5,35 +5,34 @@ import { useNavigate } from 'react-router';
 
 export const EditCarForm = ({id}) => {
 const {formulario, handleSubmit, handleChange, setFormulario, enviado} = useForm({})
-// Traer los datos de la bbdd del coche con ese id
 const {getData, isLoading, error, data}=useFetch()
-const isLoaded = useRef(false)
+const formRef = useRef(null)
     const getCar = async ()=>{
         const url= import.meta.env.VITE_API_URLBASE;
-        await getData(`${url}/cars/${id}`)        
+        await getData(`${url}/cars/${id}`)
     }
 const navigate= useNavigate()
-    //devolverá el obj coche
     useEffect(() => {
-      getCar(id)    
+      getCar(id)
     }, [])
-    // recoger los datos del forulario
-useEffect(() => {
+    useEffect(() => {
     if (data?.data) {
         setFormulario(data.data)
     }
 }, [data])
-    //llamar a al endpoint a traves de fetch
     const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE
+        const formData = new FormData(formRef.current);
+        const token = localStorage.getItem("token");
         const options = {
             method: "PUT",
-            body: JSON.stringify(formulario),
-            headers: { "Content-Type": "application/json" }
+            body: formData,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
         }
         await getData(`${apiUrlBase}/cars/${id}`, options)
     }
-    //gestionar la respuesta la API 
     const handleFormSubmit= (ev)=>{
         ev.preventDefault()
         llamadaApi()
@@ -44,6 +43,7 @@ useEffect(() => {
         {isLoading && <p>Cargando coche.</p>}
             <div>
                 <form
+                    ref={formRef}
                     action=""
                     method="POST"
                     target="_self"
@@ -74,8 +74,11 @@ useEffect(() => {
                     <label htmlFor="pricePerDay">Precio por dia:</label>
                     <input type="number" id="pricePerDay" name="pricePerDay" value={formulario?.pricePerDay || ''} onChange={handleChange} placeholder="Introducir precio por dia." />
 
+                    <label htmlFor="image">Imagen:</label>
+                    <input type="file" id="image" name="image" accept="image/*" />
+
                     <label htmlFor="available">Disponibilidad:</label>
-                    <input type="checkbox" id="available" name="available" checked={formulario?.available || false} onChange={handleChange} />
+                    <input type="checkbox" id="available" name="available" value="true" checked={formulario?.available || false} onChange={handleChange} />
 
                     <input type="submit" value="Guardar" />
                     </div>

@@ -1,12 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { useNavigate } from 'react-router'
 import { CarContainer } from '../../components/car/CarContainer'
 
 export const AdminCars = () => {
+  const navigate = useNavigate()
   return (
     <main className="main-content">
-      <h1> Administrador de coches</h1>
-      <Link to='/admin/cars/create'>añadir maricoche</Link>
+      <h1>Administrador de coches</h1>
+      <button onClick={() => navigate('/admin/cars/create')}>Añadir Maricoche</button>
       <CarContainer/>
     </main>
   )

@@ -31,7 +31,7 @@ export const UserForm = ({ user, onSave, onCancel }) => {
     }
 
     return (
-        <div style={{ border: "1px solid #ccc", padding: 16, margin: "10px 0" }}>
+        <div className="form-container">
             <h3>{user ? "Editar usuario" : "Crear usuario"}</h3>
             <form onSubmit={handleSubmit}>
                 <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} required />

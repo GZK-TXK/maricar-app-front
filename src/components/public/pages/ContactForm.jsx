@@ -44,7 +44,7 @@ export const ContactForm = () => {
     return (
         <>
             <h1>Reservar {car.brand} {car.model}</h1>
-            <img src={imgUrl} alt={car.brand} style={{ width: "100%", maxHeight: 250, objectFit: "cover" }} />
+            <img src={imgUrl} alt={car.brand} className="card-image-lg" />
             <p>Precio: {car.pricePerDay}€/día</p>
 
             <form onSubmit={handleSubmit}>

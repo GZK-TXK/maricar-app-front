@@ -43,12 +43,12 @@ export const CarDetail = () => {
     return (
         <>
             <h1>{car.brand} {car.model}</h1>
-            <img src={imgUrl} alt={car.brand} style={{ width: "100%", maxHeight: 300, objectFit: "cover" }} />
+            <img src={imgUrl} alt={car.brand} className="card-image-lg" />
             <p>Precio: {car.pricePerDay}€/día | Categoría: {car.category}</p>
 
             <h3>Disponibilidad</h3>
             <p>Las fechas en rojo están ocupadas</p>
-            <input ref={calendarRef} placeholder="Ver disponibilidad" readOnly style={{ width: "100%" }} />
+            <input ref={calendarRef} placeholder="Ver disponibilidad" readOnly />
 
             <br /><br />
             <button onClick={() => navigate(`/reservar/${car._id}`)}>Reservar</button>

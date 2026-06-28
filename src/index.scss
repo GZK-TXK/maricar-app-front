@@ -1,26 +1,33 @@
+@use './styles/variables' as *;
+@use './styles/mixins' as *;
+
 :root {
-  --primary: #747474;
-  --bg-body: #f5f5f5;
-  --bg-card: #ffffff;
-  --text: #d1d5db;
-  --text-light: #666666;
-  --border: #dddddd;
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --color-primary: #{$color-primary};
+    --color-primary-dark: #{$color-primary-dark};
+    --color-primary-light: #{$color-primary-light};
+    --color-bg: #{$color-bg};
+    --color-bg-card: #{$color-bg-card};
+    --color-text: #{$color-text};
+    --color-text-light: #{$color-text-light};
+    --color-text-heading: #{$color-text-heading};
+    --color-border: #{$color-border};
+    --color-danger: #{$color-danger};
+    --color-success: #{$color-success};
 }
 
 body {
-  margin: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  background: #1a1a2e;
-  color: var(--text);
+    margin: 0;
+    font-family: $font-family;
+    background: $color-bg;
+    color: $color-text;
+    line-height: 1.6;
 }
 
 #root {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #1a1a2e;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+    @include flex-column;
+    background: $color-bg;
 }

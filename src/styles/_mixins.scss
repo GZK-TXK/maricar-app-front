@@ -1,5 +1,79 @@
-@mixin flex-center{
-    display:flex;
+@use 'sass:color';
+@use './variables' as *;
+
+@mixin flex-center {
+    display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin card-base {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: $spacing-lg;
+    box-shadow: $shadow-md;
+}
+
+@mixin button-base {
+    background: $color-primary;
+    color: $color-text-heading;
+    border: none;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: $font-size-base;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+@mixin input-base {
+    width: 100%;
+    padding: $spacing-sm;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    background: color.adjust($color-bg-card, $lightness: 5%);
+    color: $color-text;
+    box-sizing: border-box;
+    font-size: $font-size-base;
+}
+
+@mixin responsive($bp) {
+    @if $bp == sm {
+        @media (max-width: $bp-sm) { @content; }
+    } @else if $bp == md {
+        @media (max-width: $bp-md) { @content; }
+    } @else if $bp == lg {
+        @media (max-width: $bp-lg) { @content; }
+    } @else if $bp == xl {
+        @media (max-width: $bp-xl) { @content; }
+    }
+}
+
+@mixin container {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: $spacing-xl;
+    box-sizing: border-box;
 }
