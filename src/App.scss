@@ -238,6 +238,12 @@ button.btn-secondary {
     background: $color-secondary;
 }
 
+button.btn-sm {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+    margin: 0;
+}
+
 button.btn-primary {
     background: $color-primary;
     padding: $spacing-xs $spacing-md;
@@ -256,6 +262,24 @@ a {
 
     &:hover {
         text-decoration: underline;
+    }
+}
+
+// DATE RANGE LIST
+.date-range-list {
+    list-style: none;
+    padding: 0;
+    margin: $spacing-sm 0;
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: $spacing-xs $spacing-sm;
+        background: rgba(255,255,255,0.05);
+        border-radius: $radius-sm;
+        margin-bottom: $spacing-xs;
+        color: $color-text;
     }
 }
 
@@ -287,6 +311,14 @@ a {
     width: 128px;
     height: 128px;
     object-fit: cover;
+}
+
+// WELCOME IMAGE
+.welcome-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-lg;
 }
 
 // RESPONSIVE

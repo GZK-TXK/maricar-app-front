@@ -10,9 +10,9 @@ export const PublicCardCar = ({ car }) => {
             <img src={imgUrl} alt={car.brand} className="card-image" />
             <div className="card-content">
                 <h3>{car.brand} {car.model}</h3>
-                <p>Matrícula: {car.plate}</p>
-                <p>Categoría: {car.category}</p>
-                <p>Precio: {car.pricePerDay}€ / día</p>
+                <p>Mari-Matrícula: {car.plate}</p>
+                <p>Mari-Categoría: {car.category}</p>
+                <p>Mari-Precio: {car.pricePerDay}€ / día</p>
                 <p>Disponible: {car.available ? "Sí" : "No"}</p>
                 <div className="card-actions">
                     <button onClick={() => navigate(`/car/${car._id}`)}>Reservar</button>

@@ -1,12 +1,16 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from '../../hooks/useForm';
 import { useFetch } from '../../hooks/useFetch'
 import { useNavigate } from 'react-router';
+import flatpickr from 'flatpickr'
+import 'flatpickr/dist/flatpickr.min.css'
 
 export const EditCarForm = ({id}) => {
 const {formulario, handleSubmit, handleChange, setFormulario, enviado} = useForm({})
 const {getData, isLoading, error, data}=useFetch()
 const formRef = useRef(null)
+const calendarRef = useRef(null)
+const [unavailableDates, setUnavailableDates] = useState([])
     const getCar = async ()=>{
         const url= import.meta.env.VITE_API_URLBASE;
         await getData(`${url}/cars/${id}`)
@@ -18,11 +22,41 @@ const navigate= useNavigate()
     useEffect(() => {
     if (data?.data) {
         setFormulario(data.data)
+        setUnavailableDates(data.data.unavailableDates || [])
     }
 }, [data])
+
+    useEffect(() => {
+        if (!calendarRef.current) return
+        const fp = flatpickr(calendarRef.current, {
+            mode: "range",
+            minDate: "today",
+            dateFormat: "Y-m-d",
+        })
+        return () => fp.destroy()
+    }, [])
+
+    const addDateRange = () => {
+        const val = calendarRef.current?.value
+        if (!val) return
+        const [start, end] = val.split(" to ")
+        if (!start || !end) {
+            const d = new Date(start || val)
+            setUnavailableDates(prev => [...prev, { start: val, end: val }])
+        } else {
+            setUnavailableDates(prev => [...prev, { start, end }])
+        }
+        calendarRef.current._flatpickr.clear()
+    }
+
+    const removeDateRange = (index) => {
+        setUnavailableDates(prev => prev.filter((_, i) => i !== index))
+    }
+
     const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE
         const formData = new FormData(formRef.current);
+        formData.append("unavailableDates", JSON.stringify(unavailableDates))
         const token = localStorage.getItem("token");
         const options = {
             method: "PUT",
@@ -79,6 +113,21 @@ const navigate= useNavigate()
 
                     <label htmlFor="available">Disponibilidad:</label>
                     <input type="checkbox" id="available" name="available" value="true" checked={formulario?.available || false} onChange={handleChange} />
+
+                    <hr />
+                    <h3>Fechas no disponibles</h3>
+                    {unavailableDates.length === 0 && <p>No hay fechas bloqueadas</p>}
+                    <ul className="date-range-list">
+                        {unavailableDates.map((r, i) => (
+                            <li key={i}>
+                                {new Date(r.start).toLocaleDateString()} - {new Date(r.end).toLocaleDateString()}
+                                <button type="button" className="btn-danger btn-sm" onClick={() => removeDateRange(i)}>X</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <input ref={calendarRef} placeholder="Seleccionar rango de fechas" readOnly />
+                    <button type="button" className="btn-accent btn-sm" onClick={addDateRange}>Añadir rango</button>
+                    <hr />
 
                     <input type="submit" value="Guardar" />
                     </div>

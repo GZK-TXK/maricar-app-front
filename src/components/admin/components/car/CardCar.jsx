@@ -40,9 +40,9 @@ export const CardCar = ({ car, onDelete }) => {
             <img src={imgUrl} alt={car.brand} className="card-image" />
             <div className="card-content">
                 <h3>{car.brand} {car.model}</h3>
-                <p>Matrícula: {car.plate}</p>
-                <p>Categoría: {car.category}</p>
-                <p>Precio: {car.pricePerDay}€ / día</p>
+                <p>Mari-Matrícula: {car.plate}</p>
+                <p>Mari-Categoría: {car.category}</p>
+                <p>Mari-Precio: {car.pricePerDay}€ / día</p>
                 <p>¿Esta Disponible? {car.available ? "Sí" : "No"}</p>
                 <div className="card-actions">
                     <button className="btn-accent" onClick={() => navigate(`/admin/cars/${car._id}`)}>Editar</button>

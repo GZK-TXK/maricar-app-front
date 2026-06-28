@@ -7,7 +7,7 @@ export const App = () => {
   return (
     <AuthProvider>
       <header>
-        <img src="/Logo.png" alt="MariCar App" className="logo" />
+        <img src="/logo.png" alt="MariCar App" className="logo" />
         <NavBarPublic />
       </header>
       <AppRoutes />
