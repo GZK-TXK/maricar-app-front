@@ -37,16 +37,13 @@ const navigate= useNavigate()
     }, [])
 
     const addDateRange = () => {
-        const val = calendarRef.current?.value
-        if (!val) return
-        const [start, end] = val.split(" to ")
-        if (!start || !end) {
-            const d = new Date(start || val)
-            setUnavailableDates(prev => [...prev, { start: val, end: val }])
-        } else {
-            setUnavailableDates(prev => [...prev, { start, end }])
-        }
-        calendarRef.current._flatpickr.clear()
+        const fp = calendarRef.current?._flatpickr
+        if (!fp || fp.selectedDates.length === 0) return
+        const dates = fp.selectedDates.map(d => d.toISOString().split("T")[0])
+        const start = dates[0]
+        const end = dates.length > 1 ? dates[dates.length - 1] : start
+        setUnavailableDates(prev => [...prev, { start, end }])
+        fp.clear()
     }
 
     const removeDateRange = (index) => {
@@ -67,9 +64,9 @@ const navigate= useNavigate()
         }
         await getData(`${apiUrlBase}/cars/${id}`, options)
     }
-    const handleFormSubmit= (ev)=>{
+    const handleFormSubmit= async (ev)=>{
         ev.preventDefault()
-        llamadaApi()
+        await llamadaApi()
         navigate('/admin/cars')
     }
         return (
