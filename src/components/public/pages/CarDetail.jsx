@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router'
-import flatpickr from 'flatpickr'
-import 'flatpickr/dist/flatpickr.min.css'
+import { useFlatpickr } from '../hooks/useFlatpickr'
 
 export const CarDetail = () => {
     const { id } = useParams()
@@ -16,25 +15,22 @@ export const CarDetail = () => {
             .then(r => r.json())
             .then(d => setCar(d.data))
     }, [id])
+    const disabled=(car?.unavailableDates || []).flatMap(r=>{
+        const dates= [];
+        let d = new Date(r.start)
+        while (d <= new Date(r.end)){
+            dates.push(new Date(d))
+            d.setDate(d.getDate()+1)
+        }
+        return dates
+    })
 
-    useEffect(() => {
-        if (!car) return
-        const disabled = (car.unavailableDates || []).flatMap(r => {
-            const dates = []
-            let d = new Date(r.start)
-            while (d <= new Date(r.end)) {
-                dates.push(new Date(d))
-                d.setDate(d.getDate() + 1)
-            }
-            return dates
-        })
-        flatpickr(calendarRef.current, {
-            mode: "range",
-            minDate: "today",
-            dateFormat: "Y-m-d",
-            disable: disabled.map(d => d.toISOString().split("T")[0]),
-        })
-    }, [car])
+    useFlatpickr(calendarRef, {
+        mode: "range",
+        minDate: "today",
+        dateFormat: "Y-m-d",
+        disable: car ? disabled.map(d => d.toISOString().split("T")[0]) : [],
+    },[car])
 
     if (!car) return <p>Cargando...</p>
 

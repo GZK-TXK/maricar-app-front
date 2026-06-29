@@ -41,17 +41,10 @@ export const CreateCarForm = () => {
             {isLoading && <p>Cargando</p>}
             <div>
                 <form
-                    ref={formRef}
-                    action=""
-                    method="POST"
-                    target="_self"
-                    autoComplete="off"
-                    noValidate
+                    ref={formRef}                    
                     id="createCarForm"
                     name="createCarForm"
-                    acceptCharset="UTF-8"
-                    onSubmit={handleSubmit}
-                    rel="noopener noreferrer">
+                    onSubmit={handleSubmit}                    >
                     <div>
                         <label htmlFor="brand">Marca:</label>
                         <input type="text" id="brand" name="brand" placeholder="Introducir la marca." />

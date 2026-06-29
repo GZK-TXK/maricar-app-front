@@ -17,19 +17,15 @@ export const AppRoutes = () => {
         {/*PUBLIC*/}
         <Route path='/' element={<HomePage />} />
         <Route path='/cars' element={<Cars />} />
+        <Route path="/car/:id" element={<CarDetail />} />
+
+        {/*AUTH*/}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/car/:id" element={<CarDetail />} />
-        <Route path="/reservar/:carId" element={<PrivateRoute><ContactForm /></PrivateRoute>} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
 
+        {/*USER*/}
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/reservar/:carId" element={<PrivateRoute><ContactForm /></PrivateRoute>} />
 
         {/*ADMIN*/}
         <Route path='/admin' element={<PrivateRoute adminOnly><HomeAdmin /></PrivateRoute>} />
@@ -37,11 +33,6 @@ export const AppRoutes = () => {
         <Route path='/admin/cars/create' element={<PrivateRoute adminOnly><CreateCar /></PrivateRoute>} />
         <Route path='/admin/cars/:id' element={<PrivateRoute adminOnly><EditCar /></PrivateRoute>} />
         <Route path='/admin/users' element={<PrivateRoute adminOnly><GestionUsuarios /></PrivateRoute>} />
-
-        {/*USER*/}
-
-
       </Routes>
   )
 }
-//<Route path='/login' element={<Login />} />  

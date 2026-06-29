@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from '../../hooks/useForm';
 import { useFetch } from '../../hooks/useFetch'
 import { useNavigate } from 'react-router';
-import flatpickr from 'flatpickr'
-import 'flatpickr/dist/flatpickr.min.css'
+import { useFlatpickr } from '../../../public/hooks/useFlatpickr';
 
 export const EditCarForm = ({id}) => {
 const {formulario, handleSubmit, handleChange, setFormulario, enviado} = useForm({})
@@ -26,23 +25,20 @@ const navigate= useNavigate()
     }
 }, [data])
 
-    useEffect(() => {
-        if (!calendarRef.current) return
-        const fp = flatpickr(calendarRef.current, {
-            mode: "range",
-            minDate: "today",
-            dateFormat: "Y-m-d",
-        })
-        return () => fp.destroy()
+    const fpInstance = useFlatpickr(calendarRef,{
+
+        mode: "range",
+        minDate: "today",
+        dateFormat: "Y-m-d"
     }, [])
 
     const addDateRange = () => {
-        const fp = calendarRef.current?._flatpickr
-        if (!fp || fp.selectedDates.length === 0) return
-        const dates = fp.selectedDates.map(d => d.toISOString().split("T")[0])
-        const start = dates[0]
-        const end = dates.length > 1 ? dates[dates.length - 1] : start
-        setUnavailableDates(prev => [...prev, { start, end }])
+        const fp = fpInstance.current
+        if(!fp || fp.selectedDates.length === 0) return
+        const dates = fp.selectedDates.map(d=> d.toISOString().split("T")[0])
+        const start= dates[0]
+        const end=dates.length > 1 ? dates[dates.length -1] : start
+        setUnavailableDates(prev => [...prev,{start,end}])
         fp.clear()
     }
 
@@ -74,17 +70,10 @@ const navigate= useNavigate()
         {isLoading && <p>Cargando coche.</p>}
             <div>
                 <form
-                    ref={formRef}
-                    action=""
-                    method="POST"
-                    target="_self"
-                    autoComplete="off"
-                    noValidate
+                    ref={formRef}                    
                     id="editCarForm"
                     name="editarCarForm"
-                    acceptCharset="UTF-8"
-                    onSubmit={handleFormSubmit}
-                    rel="noopener noreferrer">
+                    onSubmit={handleFormSubmit}>
                     <div>
                     <label htmlFor="brand">Marca:</label>
                     <input type="text" id="brand" name="brand" value={formulario?.brand || ''} onChange={handleChange} placeholder="Introducir la marca." />
