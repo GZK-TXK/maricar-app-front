@@ -8,8 +8,6 @@ export const CarDetail = () => {
     const calendarRef = useRef(null)
     const [car, setCar] = useState(null)
 
-    const API_BASE = import.meta.env.VITE_API_URLBASE.replace("/api/v1", "")
-
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URLBASE}/cars/${id}`)
             .then(r => r.json())
@@ -34,7 +32,7 @@ export const CarDetail = () => {
 
     if (!car) return <p>Cargando...</p>
 
-    const imgUrl = car.imageUrl ? `${API_BASE}${car.imageUrl}` : "https://placehold.co/300x200?text=Sin+imagen"
+    const imgUrl = car.imageUrl || "https://placehold.co/300x200?text=Sin+imagen"
 
     return (
         <>

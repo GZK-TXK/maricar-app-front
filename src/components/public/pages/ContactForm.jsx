@@ -10,8 +10,6 @@ export const ContactForm = () => {
     const [car, setCar] = useState(null)
     const [form, setForm] = useState({ name: user?.name || "", email: user?.email || "", phone: "", message: "" })
 
-    const API_BASE = import.meta.env.VITE_API_URLBASE.replace("/api/v1", "")
-
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URLBASE}/cars/${carId}`)
             .then(r => r.json())
@@ -39,7 +37,7 @@ export const ContactForm = () => {
 
     if (!car) return <p>Cargando...</p>
 
-    const imgUrl = car.imageUrl ? `${API_BASE}${car.imageUrl}` : "https://placehold.co/300x200?text=Sin+imagen"
+    const imgUrl = car.imageUrl || "https://placehold.co/300x200?text=Sin+imagen"
 
     return (
         <>

@@ -5,10 +5,7 @@ import Swal from 'sweetalert2'
 export const CardCar = ({ car, onDelete }) => {
     const navigate = useNavigate()
     const { getData } = useFetch()
-    const API_BASE = import.meta.env.VITE_API_URLBASE.replace("/api/v1", "")
-    const imgUrl = car.imageUrl
-        ? `${API_BASE}${car.imageUrl}`
-        : "https://placehold.co/300x200?text=Sin+imagen"
+    const imgUrl = car.imageUrl || "https://placehold.co/300x200?text=Sin+imagen"
 
     const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE
