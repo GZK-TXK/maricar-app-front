@@ -28,6 +28,12 @@ export const HomeAdmin = () => {
           User
         </button>
 
+        <button
+          onClick={()=> handleCar('reservations')}
+        >
+          Reservas
+        </button>
+
       </div>
     </main>
 
