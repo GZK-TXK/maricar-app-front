@@ -10,9 +10,8 @@ export const BookingSuccess = () => {
     const sessionId = searchParams.get("session_id")
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
         fetch(`${import.meta.env.VITE_API_URLBASE}/reservations/session/${sessionId}`, {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
         })
             .then(r => r.json())
             .then(d => {

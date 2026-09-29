@@ -10,7 +10,7 @@ export const Dashboard = () => {
     useEffect(() => {
         const fetchReservations = async () => {
             const res = await fetch(`${import.meta.env.VITE_API_URLBASE}/reservations/my`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+                credentials: "include"
             })
             const data = await res.json()
             if (data.ok) setReservations(data.data)
@@ -18,8 +18,8 @@ export const Dashboard = () => {
         fetchReservations()
     }, [])
 
-    const handleLogout = () => {
-        logout()
+    const handleLogout = async () => {
+        await logout()
         navigate('/')
     }
 

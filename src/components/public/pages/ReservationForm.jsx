@@ -35,15 +35,12 @@ export const ReservationForm = () => {
     const imgUrl = car.imageUrl || "https://placehold.co/300x200?text=Sin+imagen"
 
     const handlePay = async () => {
-        const token = localStorage.getItem("token")
         setLoading(true)
         try {
             const res = await fetch(`${import.meta.env.VITE_API_URLBASE}/reservations`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ carId, startDate: start, endDate: end }),
             })
             const data = await res.json()

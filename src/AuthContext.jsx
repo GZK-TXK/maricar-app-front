@@ -1,29 +1,35 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
 const AuthContext = createContext();
+const API = import.meta.env.VITE_API_URLBASE;
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (storedToken) {
+        const fetchMe = async () => {
             try {
-                const payload = JSON.parse(atob(storedToken.split(".")[1]));
-                setUser(payload);
-                setToken(storedToken);
-                setIsAuthenticated(true);
+                const res = await fetch(`${API}/auth/me`, { credentials: "include" });
+                const data = await res.json();
+                if (data.ok) {
+                    setUser(data.data);
+                    setIsAuthenticated(true);
+                }
             } catch {
-                localStorage.removeItem("token");
+                // sin sesión
+            } finally {
+                setIsLoading(false);
             }
-        }
+        };
+        fetchMe();
     }, []);
 
     const login = async (email, password) => {
-        const res = await fetch(`${import.meta.env.VITE_API_URLBASE}/auth/login`, {
+        const res = await fetch(`${API}/auth/login`, {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
         });
@@ -34,33 +40,27 @@ export const AuthProvider = ({ children }) => {
             throw new Error(data.msg);
         }
 
-        localStorage.setItem("token", data.data.token);
-        setToken(data.data.token);
         setUser(data.data.user);
         setIsAuthenticated(true);
     };
 
-    const setAuthFromToken = (token) => {
-        try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            localStorage.setItem("token", token);
-            setToken(token);
-            setUser(payload);
-            setIsAuthenticated(true);
-        } catch {
-            localStorage.removeItem("token");
-        }
+    const setSession = (u) => {
+        setUser(u);
+        setIsAuthenticated(true);
     };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        setToken(null);
+    const logout = async () => {
+        try {
+            await fetch(`${API}/auth/logout`, { method: "POST", credentials: "include" });
+        } catch {
+            // ignorar
+        }
         setUser(null);
         setIsAuthenticated(false);
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, login, logout, setAuthFromToken }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, logout, setSession }}>
             {children}
         </AuthContext.Provider>
     );

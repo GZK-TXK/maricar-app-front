@@ -6,19 +6,17 @@ import { useNavigate } from 'react-router'
 export const CreateCarForm = () => {
     const navigate = useNavigate()
     const { formulario, handleSubmit, setFormulario } = useForm()
-    const { getData, data, isLoading } = useFetch(formulario)
+    const { getData, data, isLoading } = useFetch()
     const formRef = useRef(null)
 
     const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE;
         const formData = new FormData(formRef.current);
-        const token = localStorage.getItem("token");
+        formData.set("available", formData.has("available") ? "true" : "false")
         const options = {
             method: "POST",
             body: formData,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
+            credentials: "include",
         }
         await getData(`${apiUrlBase}/cars`, options)
     }
@@ -41,10 +39,10 @@ export const CreateCarForm = () => {
             {isLoading && <p>Cargando</p>}
             <div>
                 <form
-                    ref={formRef}                    
+                    ref={formRef}
                     id="createCarForm"
                     name="createCarForm"
-                    onSubmit={handleSubmit}                    >
+                    onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="brand">Marca:</label>
                         <input type="text" id="brand" name="brand" placeholder="Introducir la marca." />

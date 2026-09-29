@@ -9,10 +9,9 @@ export const CardCar = ({ car, onDelete }) => {
 
     const llamadaApi = async () => {
         const apiUrlBase = import.meta.env.VITE_API_URLBASE
-        const token = localStorage.getItem("token")
         const options = {
             method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` }
+            credentials: "include"
         }
         await getData(`${apiUrlBase}/cars/${car._id}`, options)
     }

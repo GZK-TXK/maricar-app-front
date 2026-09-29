@@ -11,9 +11,7 @@ export const GestionUsuarios = () => {
     const API = import.meta.env.VITE_API_URLBASE
 
     const fetchUsers = async () => {
-        const res = await fetch(`${API}/users`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        })
+        const res = await fetch(`${API}/users`, { credentials: "include" })
         const data = await res.json()
         if (data.ok) setUsers(data.data)
     }
@@ -27,10 +25,8 @@ export const GestionUsuarios = () => {
 
         const res = await fetch(url, {
             method,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            },
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(form)
         })
         const data = await res.json()
@@ -57,7 +53,7 @@ export const GestionUsuarios = () => {
 
         const res = await fetch(`${API}/users/${id}`, {
             method: "DELETE",
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            credentials: "include"
         })
         const data = await res.json()
         if (data.ok) {

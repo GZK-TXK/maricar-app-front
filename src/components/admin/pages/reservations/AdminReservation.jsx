@@ -8,9 +8,7 @@ export const AdminReservation = () => {
     const API = import.meta.env.VITE_API_URLBASE
 
     const fetchReservations = async () => {
-        const res = await fetch(`${API}/reservations`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        })
+        const res = await fetch(`${API}/reservations`, { credentials: "include" })
         const data = await res.json()
         if (data.ok) setReservations(data.data)
     }
@@ -20,7 +18,7 @@ export const AdminReservation = () => {
     const handleCancel = async (id) => {
         const res = await fetch(`${API}/reservations/${id}/cancel`, {
             method: "PATCH",
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            credentials: "include"
         })
         const data = await res.json()
         if (data.ok) {

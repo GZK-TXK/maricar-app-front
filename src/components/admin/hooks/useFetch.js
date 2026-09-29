@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export const useFetch = () => {
     const [data, setData] = useState(null)
@@ -6,27 +6,24 @@ export const useFetch = () => {
     const [error, setError] = useState(null)
 
     const getData = async (url, options = {}) => {
+        setIsLoading(true)
         try {
-            const resp = await fetch(url, options)
-            console.log(resp)
-            const result = await resp.json()
+            const resp = await fetch(url, { credentials: "include", ...options })
+            const result = await resp.json().catch(() => ({}))
             if (!resp.ok) {
                 setData(null)
                 setError(result)
-                setIsLoading(false)
             } else {
                 setData(result)
                 setError(null)
-                setIsLoading(false)
             }
-        }
-        catch (error) {
+        } catch (err) {
             setData(null)
-            setError(error.message)
-            console.log('Error',error)
+            setError(err.message)
+        } finally {
+            setIsLoading(false)
         }
     }
-
 
     return {
         getData,
