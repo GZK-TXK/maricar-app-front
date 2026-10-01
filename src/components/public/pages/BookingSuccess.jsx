@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router'
+import { reservationsApi } from '../../../api/reservations.js'
 
 export const BookingSuccess = () => {
     const [searchParams] = useSearchParams()
@@ -10,34 +11,33 @@ export const BookingSuccess = () => {
     const sessionId = searchParams.get("session_id")
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URLBASE}/reservations/session/${sessionId}`, {
-            credentials: "include",
-        })
-            .then(r => r.json())
-            .then(d => {
-                if (!d.ok) throw new Error(d.msg)
-                setReservation(d.data)
-            })
-            .catch(err => setError(err.message))
+        reservationsApi.bySession(sessionId)
+            .then((d) => setReservation(d.data))
+            .catch((err) => setError(err.message))
     }, [sessionId])
 
-    if (error) return <p>Error: {error}</p>
-    if (!reservation) return <p>Cargando...</p>
+    if (error) return <main className="main-content"><p className="error-text">Error: {error}</p></main>
+    if (!reservation) return <main className="main-content"><p>Cargando...</p></main>
 
     const car = reservation.car
 
     return (
-        <>
-            <h1>¡Reserva confirmada!</h1>
-            <div className="card">
-                <p>Coche: {car.brand} {car.model}</p>
-                <p>Fecha de inicio: {new Date(reservation.startDate).toLocaleDateString()}</p>
-                <p>Fecha de fin: {new Date(reservation.endDate).toLocaleDateString()}</p>
-                <p>Días: {reservation.days}</p>
-                <p>Total pagado: {reservation.totalPrice}€</p>
-                <p>Estado: {reservation.status}</p>
+        <main className="main-content">
+            <div className="result-card">
+                <div className="result-card__icon is-success">✓</div>
+                <h1>¡Reserva confirmada!</h1>
+                <p className="hint">Hemos enviado los detalles a tu correo.</p>
+
+                <dl className="booking__rows">
+                    <div><dt>Coche</dt><dd>{car.brand} {car.model}</dd></div>
+                    <div><dt>Desde</dt><dd>{new Date(reservation.startDate).toLocaleDateString()}</dd></div>
+                    <div><dt>Hasta</dt><dd>{new Date(reservation.endDate).toLocaleDateString()}</dd></div>
+                    <div><dt>Días</dt><dd>{reservation.days}</dd></div>
+                    <div className="booking__total"><dt>Total pagado</dt><dd>{reservation.totalPrice}€</dd></div>
+                </dl>
+
                 <button className="btn-primary" onClick={() => navigate("/dashboard")}>Ir a mi panel</button>
             </div>
-        </>
+        </main>
     )
 }

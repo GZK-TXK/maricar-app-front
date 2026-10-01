@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useNavigate, NavLink } from 'react-router'
+import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../../../AuthContext'
+import { authApi } from '../../../api/auth.js'
 
 export const Register = () => {
     const [form, setForm] = useState({
@@ -18,20 +19,8 @@ export const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError("")
-
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URLBASE}/auth/register`, {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form)
-            })
-            const data = await res.json()
-
-            if (!data.ok) {
-                throw new Error(data.msg || "No se pudo completar el registro")
-            }
-
+            const data = await authApi.register(form)
             setSession(data.data.user)
             navigate("/dashboard")
         } catch (err) {
@@ -40,21 +29,31 @@ export const Register = () => {
     }
 
     return (
-        <div className="form-container">
-            <h3>Crear cuenta</h3>
-            {error && <p className="error-text">{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <input name="name" placeholder="Nombre" value={form.name} onChange={handleChange} required maxLength={80} />
-                <input name="surname" placeholder="Apellidos" value={form.surname} onChange={handleChange} maxLength={80} />
-                <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-                <input name="password" type="password" placeholder="Contraseña (mín. 8, mayúscula, minúscula y número)" value={form.password} onChange={handleChange} required minLength={8} />
-                <input name="birthday" type="date" value={form.birthday} onChange={handleChange} required />
-                <input name="phone" type="tel" placeholder="Teléfono" value={form.phone} onChange={handleChange} required maxLength={20} />
-                <input name="direction" placeholder="Dirección" value={form.direction} onChange={handleChange} maxLength={200} />
-                <br />
-                <button type="submit">Registrarse</button>
-            </form>
-            <p>¿Ya tienes cuenta? <NavLink to="/login">Iniciar sesión</NavLink></p>
-        </div>
+        <main className="main-content">
+            <div className="auth-card">
+                <h1>Crear cuenta</h1>
+                {error && <p className="error-text">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="name">Nombre</label>
+                    <input id="name" name="name" value={form.name} onChange={handleChange} required maxLength={80} />
+                    <label htmlFor="surname">Apellidos</label>
+                    <input id="surname" name="surname" value={form.surname} onChange={handleChange} maxLength={80} />
+                    <label htmlFor="email">Email</label>
+                    <input id="email" name="email" type="email" value={form.email} onChange={handleChange} required />
+                    <label htmlFor="password">Contraseña</label>
+                    <input id="password" name="password" type="password" placeholder="Mín. 8, mayúscula, minúscula y número" value={form.password} onChange={handleChange} required minLength={8} />
+                    <label htmlFor="birthday">Fecha de nacimiento</label>
+                    <input id="birthday" name="birthday" type="date" value={form.birthday} onChange={handleChange} required />
+                    <label htmlFor="phone">Teléfono</label>
+                    <input id="phone" name="phone" type="tel" value={form.phone} onChange={handleChange} required maxLength={20} />
+                    <label htmlFor="direction">Dirección</label>
+                    <input id="direction" name="direction" value={form.direction} onChange={handleChange} maxLength={200} />
+                    <button type="submit" className="btn-primary btn-block">Registrarse</button>
+                </form>
+                <p className="auth-card__links">
+                    ¿Ya tienes cuenta? <Link to="/login">Iniciar sesión</Link>
+                </p>
+            </div>
+        </main>
     )
 }

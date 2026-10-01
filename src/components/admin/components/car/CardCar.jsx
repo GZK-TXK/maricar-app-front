@@ -1,50 +1,45 @@
 import { useNavigate } from 'react-router'
-import { useFetch } from '../../hooks/useFetch'
+import { carsApi } from '../../../../api/cars.js'
 import Swal from 'sweetalert2'
 
 export const CardCar = ({ car, onDelete }) => {
     const navigate = useNavigate()
-    const { getData } = useFetch()
     const imgUrl = car.imageUrl || "https://placehold.co/300x200?text=Sin+imagen"
 
-    const llamadaApi = async () => {
-        const apiUrlBase = import.meta.env.VITE_API_URLBASE
-        const options = {
-            method: "DELETE",
-            credentials: "include"
-        }
-        await getData(`${apiUrlBase}/cars/${car._id}`, options)
-    }
-    const handleDeleteCar = async (ev) => {
+    const handleDeleteCar = async () => {
         const result = await Swal.fire({
-            title: 'Mari, que te cargas el coche',
+            title: '¿Eliminar coche?',
             text: 'El coche se eliminará permanentemente',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Eliminar',
-            cancelButtonText: 'Mejor no.'
+            cancelButtonText: 'Cancelar'
         })
-
-        if (result.isConfirmed) {
-            await llamadaApi()
+        if (!result.isConfirmed) return
+        try {
+            await carsApi.remove(car._id)
             onDelete()
-            Swal.fire('Eliminado', 'Hasta luego Maricoche', 'success')
+            Swal.fire('Eliminado', 'Coche eliminado', 'success')
+        } catch (err) {
+            Swal.fire('Error', err.message, 'error')
         }
     }
+
     return (
-        <div className="card-horizontal">
+        <article className="card-horizontal">
             <img src={imgUrl} alt={car.brand} className="card-image" />
             <div className="card-content">
                 <h3>{car.brand} {car.model}</h3>
-                <p>Mari-Matrícula: {car.plate}</p>
-                <p>Mari-Categoría: {car.category}</p>
-                <p>Mari-Precio: {car.pricePerDay}€ / día</p>
-                <p>¿Esta Disponible? {car.available ? "Sí" : "No"}</p>
+                <p className="hint">{car.category} · {car.plate}</p>
+                <p className="card-price">{car.pricePerDay}€ / día</p>
+                <span className={`badge ${car.available ? 'is-available' : 'is-unavailable'}`}>
+                    {car.available ? 'Disponible' : 'No disponible'}
+                </span>
                 <div className="card-actions">
-                    <button className="btn-accent" onClick={() => navigate(`/admin/cars/${car._id}`)}>Editar</button>
-                    <button title="Eliminar" className="btn-danger" onClick={handleDeleteCar}>Eliminar</button>
+                    <button className="btn-secondary btn-sm" onClick={() => navigate(`/admin/cars/${car._id}`)}>Editar</button>
+                    <button className="btn-danger btn-sm" onClick={handleDeleteCar}>Eliminar</button>
                 </div>
             </div>
-        </div>
+        </article>
     )
 }

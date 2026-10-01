@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router'
+import { carsApi } from '../../../api/cars.js'
+import { reservationsApi } from '../../../api/reservations.js'
 import Swal from 'sweetalert2'
 
 export const ReservationForm = () => {
@@ -13,22 +15,22 @@ export const ReservationForm = () => {
     const end = searchParams.get("end")
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URLBASE}/cars/${carId}`)
-            .then(r => r.json())
-            .then(d => setCar(d.data))
+        carsApi.get(carId)
+            .then((d) => setCar(d.data))
+            .catch(() => setCar(null))
     }, [carId])
 
     if (!start || !end) {
         return (
-            <>
+            <main className="main-content">
                 <h1>Selecciona unas fechas</h1>
                 <p>Debes elegir el rango de fechas en el calendario del coche antes de reservar.</p>
                 <button className="btn-primary" onClick={() => navigate(`/car/${carId}`)}>Volver al coche</button>
-            </>
+            </main>
         )
     }
 
-    if (!car) return <p>Cargando...</p>
+    if (!car) return <main className="main-content"><p>Cargando...</p></main>
 
     const days = Math.round((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)) + 1
     const totalPrice = days * car.pricePerDay
@@ -37,14 +39,7 @@ export const ReservationForm = () => {
     const handlePay = async () => {
         setLoading(true)
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URLBASE}/reservations`, {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ carId, startDate: start, endDate: end }),
-            })
-            const data = await res.json()
-            if (!data.ok) throw new Error(data.msg)
+            const data = await reservationsApi.create({ carId, startDate: start, endDate: end })
             window.location.href = data.data.checkoutUrl
         } catch (err) {
             Swal.fire("Error", err.message, "error")
@@ -53,27 +48,30 @@ export const ReservationForm = () => {
     }
 
     return (
-        <>
-            <h1>Reservar {car.brand} {car.model}</h1>
-            <div className="card-horizontal">
-                <img src={imgUrl} alt={car.brand} className="card-image" />
-                <div className="card-content">
-                    <h3>{car.brand} {car.model}</h3>
-                    <p>Precio: {car.pricePerDay}€/día</p>
-                    <p>Matrícula: {car.plate}</p>
-                </div>
-            </div>
+        <main className="main-content">
+            <h1>Confirmar reserva</h1>
 
-            <div className="card">
-                <h3>Resumen de tu reserva</h3>
-                <p>Fecha de inicio: {start}</p>
-                <p>Fecha de fin: {end}</p>
-                <p>Días: {days}</p>
-                <p>Total: {totalPrice}€</p>
-                <button className="btn-primary" onClick={handlePay} disabled={loading}>
+            <div className="booking">
+                <div className="booking__car">
+                    <img src={imgUrl} alt={`${car.brand} ${car.model}`} />
+                    <div>
+                        <h3>{car.brand} {car.model}</h3>
+                        <p className="car-detail__category">{car.category} · {car.plate}</p>
+                    </div>
+                </div>
+
+                <dl className="booking__rows">
+                    <div><dt>Desde</dt><dd>{start}</dd></div>
+                    <div><dt>Hasta</dt><dd>{end}</dd></div>
+                    <div><dt>Días</dt><dd>{days}</dd></div>
+                    <div><dt>Precio/día</dt><dd>{car.pricePerDay}€</dd></div>
+                    <div className="booking__total"><dt>Total</dt><dd>{totalPrice}€</dd></div>
+                </dl>
+
+                <button className="btn-primary btn-block" onClick={handlePay} disabled={loading}>
                     {loading ? "Creando reserva..." : "Pagar con Stripe"}
                 </button>
             </div>
-        </>
+        </main>
     )
 }

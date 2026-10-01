@@ -1,178 +1,184 @@
 @use './styles/variables' as *;
 @use './styles/mixins' as *;
 
-// HEADER
+// ===== HEADER (mobile first) =====
 header {
-    background: $color-primary-dark;
-    color: $color-text-heading;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    padding: $spacing-md $spacing-xl;
-    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid $color-border;
+    padding: $spacing-sm $spacing-md;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    gap: $spacing-sm;
 
     .logo {
-        height: 48px;
+        height: 34px;
         width: auto;
-        flex-shrink: 0;
     }
 
-    // NAVBAR dentro del header
     nav {
-        background: transparent;
-        padding: 0;
-        border-bottom: none;
-        flex: 1;
+        width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: $spacing-sm;
+        flex-wrap: wrap;
+        gap: $spacing-xs;
 
         ul {
-            @include flex-center;
-            gap: $spacing-md;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-wrap: wrap;
+            gap: $spacing-xs;
             padding: 0;
             margin: 0;
         }
 
-        // Divisores entre secciones del menú
-        ul + ul::before {
-            content: "|";
-            color: rgba(255, 255, 255, 0.3);
-            margin-right: $spacing-sm;
-        }
-
         a,
         span {
-            color: $color-text-heading;
+            color: $color-text;
+            text-decoration: none;
             font-size: $font-size-sm;
+            font-weight: 500;
+            padding: 0.35rem 0.7rem;
+            border-radius: $radius-full;
+            transition: background 0.2s, color 0.2s;
 
             &:hover {
-                background: rgba(255, 255, 255, 0.15);
-                color: white;
+                background: $color-primary-light;
+                color: $color-primary-dark;
             }
         }
 
         button {
+            @include button-base;
             background: $color-accent;
-            color: #0f172a;
+            padding: 0.35rem 0.8rem;
+            margin: 0;
+        }
+    }
 
-            &:hover {
-                opacity: 0.9;
-            }
+    @include from(md) {
+        flex-direction: row;
+        padding: $spacing-md $spacing-xl;
+
+        .logo {
+            height: 40px;
+        }
+
+        nav {
+            width: auto;
+            margin-left: auto;
+            justify-content: flex-end;
         }
     }
 }
 
-// NAVBAR (standalone, sin header)
-nav {
-    background: $color-bg-card;
-    padding: $spacing-sm $spacing-md;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    border-bottom: 2px solid $color-primary;
-
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        @include flex-center;
-        gap: $spacing-lg;
-        flex-wrap: wrap;
-    }
-
-    a,
-    span {
-        color: $color-text;
-        text-decoration: none;
-        font-weight: 600;
-        padding: $spacing-xs $spacing-md;
-        border-radius: $radius-sm;
-        transition: background 0.2s, color 0.2s;
-        cursor: pointer;
-
-        &:hover {
-            background: $color-primary;
-            color: white;
-        }
-    }
-
-    button {
-        background: $color-accent;
-        color: #0f172a;
-
-        &:hover {
-            opacity: 0.9;
-        }
-    }
-}
-
-// CONTENEDOR PRINCIPAL
+// ===== LAYOUT =====
 .main-content {
-    @include container;
-    text-align: center;
+    width: 100%;
+    max-width: $container-max;
+    margin: 0 auto;
+    padding: $spacing-lg $spacing-md;
     flex: 1;
+    text-align: center;
+    box-sizing: border-box;
+
+    @include from(md) {
+        padding: $spacing-xl $spacing-lg;
+    }
 }
 
-// CARDS
+// ===== CARDS =====
 .card {
     @include card-base;
     margin-bottom: $spacing-md;
+    text-align: left;
 }
 
 .card-image {
     width: 100%;
-    max-height: 200px;
+    height: 200px;
     object-fit: cover;
     border-radius: $radius-sm $radius-sm 0 0;
 }
 
 .card-horizontal {
     display: flex;
-    gap: $spacing-lg;
-    align-items: flex-start;
-    background: $color-bg-card;
+    flex-direction: column;
+    background: $color-surface;
     border: 1px solid $color-border;
     border-radius: $radius-md;
     overflow: hidden;
     margin-bottom: $spacing-md;
+    box-shadow: $shadow-sm;
+    transition: box-shadow 0.2s, transform 0.2s;
+
+    &:hover {
+        box-shadow: $shadow-md;
+        transform: translateY(-2px);
+    }
 
     .card-image {
-        width: 200px;
-        min-height: 150px;
-        max-height: none;
+        width: 100%;
+        height: 200px;
         border-radius: 0;
         flex-shrink: 0;
     }
 
     .card-content {
         flex: 1;
-        padding: $spacing-md $spacing-md $spacing-md 0;
+        padding: $spacing-md;
         text-align: left;
 
         h3 {
             margin: 0 0 $spacing-sm;
-            color: $color-text-heading;
         }
 
         p {
             margin: $spacing-xs 0;
+            color: $color-text-light;
         }
 
         .card-actions {
-            margin-top: $spacing-sm;
-            text-align: right;
+            margin-top: $spacing-md;
+            display: flex;
+            gap: $spacing-sm;
+            justify-content: flex-end;
+            flex-wrap: wrap;
         }
     }
 
     .card-avatar {
         width: 64px;
         height: 64px;
-        border-radius: 50%;
+        border-radius: $radius-full;
         margin: $spacing-md;
         flex-shrink: 0;
+    }
+
+    @include from(md) {
+        flex-direction: row;
+        align-items: stretch;
+
+        .card-image {
+            width: 220px;
+            height: auto;
+            min-height: 160px;
+        }
+
+        .card-content {
+            padding: $spacing-lg;
+        }
+
+        .card-avatar {
+            margin: $spacing-lg;
+        }
     }
 }
 
@@ -185,16 +191,19 @@ nav {
     background: $color-bg;
 }
 
-// FORMULARIOS
+// ===== FORMULARIOS =====
 form {
-    max-width: 500px;
+    width: 100%;
+    max-width: 520px;
     margin: 0 auto;
+    text-align: left;
 
     label {
         display: block;
-        margin: $spacing-md 0 $spacing-sm;
-        font-weight: bold;
+        margin: $spacing-md 0 $spacing-xs;
+        font-weight: 600;
         color: $color-text-heading;
+        font-size: $font-size-sm;
     }
 
     input,
@@ -205,26 +214,33 @@ form {
     }
 
     textarea {
-        min-height: 80px;
+        min-height: 96px;
         resize: vertical;
     }
 
     input[type="submit"] {
         @include button-base;
+        background: $color-primary;
         margin-top: $spacing-lg;
         width: 100%;
     }
 }
 
 .form-container {
+    background: $color-surface;
     border: 1px solid $color-border;
-    border-radius: $radius-md;
+    border-radius: $radius-lg;
     padding: $spacing-lg;
-    margin: $spacing-sm 0;
-    background: $color-bg-card;
+    margin: $spacing-lg auto;
+    max-width: 520px;
+    box-shadow: $shadow-sm;
+
+    @include from(md) {
+        padding: $spacing-xl;
+    }
 }
 
-// BOTONES
+// ===== BOTONES =====
 button {
     @include button-base;
     margin: $spacing-xs;
@@ -235,27 +251,30 @@ button.btn-danger {
 }
 
 button.btn-secondary {
-    background: $color-secondary;
+    background: $color-surface;
+    color: $color-text-heading;
+    border-color: $color-border;
+
+    &:hover {
+        background: $color-bg;
+    }
 }
 
 button.btn-sm {
-    padding: $spacing-xs $spacing-sm;
+    padding: 0.45rem 0.75rem;
     font-size: $font-size-xs;
     margin: 0;
 }
 
 button.btn-primary {
     background: $color-primary;
-    padding: $spacing-xs $spacing-md;
-    font-size: $font-size-sm;
 }
 
 button.btn-accent {
     background: $color-accent;
-    color: #0f172a;
 }
 
-// ENLACES
+// ===== ENLACES =====
 a {
     color: $color-secondary;
     text-decoration: none;
@@ -265,7 +284,147 @@ a {
     }
 }
 
-// DATE RANGE LIST
+// ===== FILTROS =====
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    margin: $spacing-lg 0;
+    padding: $spacing-md;
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+
+    input,
+    select {
+        @include input-base;
+        margin: 0;
+    }
+
+    @include from(sm) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+
+        input,
+        select {
+            width: auto;
+            flex: 1 1 160px;
+        }
+
+        button {
+            flex: 0 0 auto;
+        }
+    }
+}
+
+// ===== PAGINACIÓN =====
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
+    margin: $spacing-lg 0;
+
+    span {
+        color: $color-text-light;
+        font-size: $font-size-sm;
+    }
+}
+
+// ===== STATS (admin) =====
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+    margin: $spacing-lg 0;
+
+    @include from(md) {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+.stat-card {
+    @include card-base;
+    @include flex-column;
+    align-items: center;
+    gap: $spacing-xs;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: $font-size-2xl;
+    font-weight: 800;
+    color: $color-text-heading;
+}
+
+.stat-label {
+    font-size: $font-size-sm;
+    color: $color-text-light;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    justify-content: center;
+    margin-top: $spacing-lg;
+}
+
+// ===== GALERÍA =====
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin: $spacing-md 0;
+    justify-content: center;
+}
+
+.image-gallery .thumb {
+    width: 72px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: $radius-sm;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    &.active {
+        border-color: $color-primary;
+    }
+
+    @include from(md) {
+        width: 90px;
+        height: 64px;
+    }
+}
+
+.image-thumb {
+    position: relative;
+    display: inline-block;
+
+    img {
+        width: 100px;
+        height: 72px;
+        object-fit: cover;
+        border-radius: $radius-sm;
+        border: 1px solid $color-border;
+    }
+
+    button {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        margin: 0;
+        padding: 0.15rem 0.45rem;
+    }
+}
+
+// ===== DATE RANGE LIST =====
 .date-range-list {
     list-style: none;
     padding: 0;
@@ -275,15 +434,17 @@ a {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: $spacing-sm;
         padding: $spacing-xs $spacing-sm;
-        background: rgba(255,255,255,0.05);
+        background: $color-bg;
+        border: 1px solid $color-border;
         border-radius: $radius-sm;
         margin-bottom: $spacing-xs;
         color: $color-text;
     }
 }
 
-// AVAILABILITY SECTION
+// ===== DISPONIBILIDAD =====
 .availability-section {
     text-align: center;
     margin: $spacing-lg 0;
@@ -292,83 +453,655 @@ a {
         max-width: 320px;
         margin: 0 auto;
         display: block;
+        @include input-base;
+    }
+}
+
+// ===== ESTADOS =====
+.error-text {
+    color: $color-danger;
+    font-weight: 600;
+}
+
+.success-text {
+    color: $color-success;
+    font-weight: 600;
+}
+
+.loader {
+    @include flex-column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
+    padding: $spacing-2xl;
+    color: $color-text-light;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid $color-border;
+    border-top-color: $color-primary;
+    border-radius: $radius-full;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-boundary {
+    @include card-base;
+    max-width: 520px;
+    margin: $spacing-2xl auto;
+    text-align: center;
+}
+
+// ===== AVATAR / WELCOME =====
+.avatar {
+    border-radius: $radius-full;
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+
+    @include from(md) {
+        width: 128px;
+        height: 128px;
+    }
+}
+
+.welcome-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-lg;
+}
+
+// ===== HERO (mobile first) =====
+.hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+    align-items: center;
+    text-align: center;
+    margin-bottom: $spacing-2xl;
+    padding: $spacing-lg 0;
+
+    &__eyebrow {
+        display: inline-block;
+        background: $color-primary-light;
+        color: $color-primary-dark;
+        font-weight: 600;
+        font-size: $font-size-sm;
+        padding: 0.25rem 0.75rem;
+        border-radius: $radius-full;
+        margin-bottom: $spacing-md;
     }
 
-    button {
+    h1 {
+        font-size: $font-size-2xl;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin-bottom: $spacing-md;
+    }
+
+    p {
+        color: $color-text-light;
+        font-size: $font-size-lg;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__image {
+        width: 100%;
+        border-radius: $radius-lg;
+        box-shadow: $shadow-lg;
+        order: -1;
+    }
+
+    @include from(lg) {
+        grid-template-columns: 1.1fr 1fr;
+        text-align: left;
+        gap: $spacing-2xl;
+        padding: $spacing-xl 0;
+
+        h1 {
+            font-size: $font-size-3xl;
+        }
+
+        &__image {
+            order: 0;
+        }
+    }
+}
+
+.section-title {
+    text-align: left;
+    font-size: $font-size-xl;
+    margin: $spacing-2xl 0 $spacing-lg;
+}
+
+.page-head {
+    text-align: center;
+    margin-bottom: $spacing-lg;
+
+    h1 {
+        font-size: $font-size-2xl;
+    }
+
+    p {
+        color: $color-text-light;
+    }
+}
+
+// ===== GRID DE COCHES (mobile first) =====
+.car-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+    margin: $spacing-lg 0;
+
+    @include from(sm) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-lg;
+    }
+
+    @include from(lg) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.car-card {
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    text-align: left;
+    box-shadow: $shadow-sm;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-lg;
+    }
+
+    &__image {
+        position: relative;
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    }
+
+    &__badge {
+        position: absolute;
+        top: $spacing-sm;
+        left: $spacing-sm;
+        font-size: $font-size-xs;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: $radius-full;
+        color: #fff;
+
+        &.is-available { background: $color-success; }
+        &.is-unavailable { background: $color-text-light; }
+    }
+
+    &__body {
+        padding: $spacing-md;
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+        flex: 1;
+
+        h3 {
+            margin: 0;
+            font-size: $font-size-lg;
+        }
+    }
+
+    &__meta {
+        color: $color-text-light;
+        font-size: $font-size-sm;
+        margin: 0;
+    }
+
+    &__footer {
+        margin-top: auto;
+        padding-top: $spacing-md;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: $spacing-sm;
+    }
+
+    &__price {
+        font-size: $font-size-xl;
+        font-weight: 800;
+        color: $color-text-heading;
+
+        small {
+            font-size: $font-size-sm;
+            font-weight: 500;
+            color: $color-text-light;
+        }
+    }
+}
+// ===== BREADCRUMB =====
+.breadcrumb {
+    text-align: left;
+    margin-bottom: $spacing-md;
+    font-size: $font-size-sm;
+}
+
+// ===== DETALLE DE COCHE =====
+.car-detail {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+    text-align: left;
+    margin-bottom: $spacing-2xl;
+
+    @include from(lg) {
+        grid-template-columns: 1.2fr 1fr;
+        gap: $spacing-2xl;
+        align-items: start;
+    }
+
+    &__main {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        border-radius: $radius-lg;
+        box-shadow: $shadow-md;
+        display: block;
+    }
+
+    &__thumbs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+        margin-top: $spacing-sm;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+    }
+
+    &__badge {
+        align-self: flex-start;
+        font-size: $font-size-xs;
+        font-weight: 600;
+        padding: 0.2rem 0.6rem;
+        border-radius: $radius-full;
+        color: #fff;
+
+        &.is-available { background: $color-success; }
+        &.is-unavailable { background: $color-text-light; }
+    }
+
+    &__category {
+        color: $color-text-light;
+        margin: 0;
+    }
+
+    &__price {
+        font-size: $font-size-2xl;
+        font-weight: 800;
+        color: $color-text-heading;
+        margin: $spacing-sm 0;
+
+        small {
+            font-size: $font-size-base;
+            font-weight: 500;
+            color: $color-text-light;
+        }
+    }
+
+    &__total {
+        font-weight: 600;
+        color: $color-text-heading;
+    }
+}
+
+.hint {
+    color: $color-text-light;
+    font-size: $font-size-sm;
+}
+
+// ===== BOOKING =====
+.booking {
+    @include card-base;
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: left;
+    padding: $spacing-lg;
+
+    @include from(md) {
+        padding: $spacing-xl;
+    }
+
+    &__car {
+        display: flex;
+        gap: $spacing-md;
+        align-items: center;
+        padding-bottom: $spacing-md;
+        border-bottom: 1px solid $color-border;
+
+        img {
+            width: 96px;
+            height: 68px;
+            object-fit: cover;
+            border-radius: $radius-sm;
+            flex-shrink: 0;
+        }
+
+        h3 { margin: 0 0 $spacing-xs; }
+        p { margin: 0; }
+    }
+
+    &__rows {
+        margin: $spacing-md 0;
+
+        > div {
+            display: flex;
+            justify-content: space-between;
+            padding: $spacing-xs 0;
+        }
+
+        dt { color: $color-text-light; }
+        dd { margin: 0; font-weight: 600; color: $color-text-heading; }
+    }
+
+    &__total {
+        border-top: 1px solid $color-border;
+        margin-top: $spacing-xs;
+        padding-top: $spacing-sm !important;
+        font-size: $font-size-lg;
+
+        dd { font-size: $font-size-xl; font-weight: 800; }
+    }
+}
+
+.btn-block {
+    width: 100%;
+}
+
+// ===== RESULTADO (success / cancel) =====
+.result-card {
+    @include card-base;
+    max-width: 480px;
+    margin: $spacing-xl auto;
+    text-align: center;
+    padding: $spacing-xl;
+
+    &__icon {
+        width: 56px;
+        height: 56px;
+        margin: 0 auto $spacing-md;
+        border-radius: $radius-full;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: $font-size-xl;
+        font-weight: 800;
+        color: #fff;
+
+        &.is-success { background: $color-success; }
+        &.is-danger { background: $color-danger; }
+    }
+}
+
+// ===== AUTH =====
+.auth-card {
+    @include card-base;
+    max-width: 440px;
+    margin: $spacing-xl auto;
+    padding: $spacing-lg;
+    text-align: left;
+
+    @include from(md) {
+        padding: $spacing-xl;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: $font-size-xl;
+        margin-bottom: $spacing-md;
+    }
+
+    form {
+        max-width: none;
+        margin: 0;
+    }
+
+    &__links {
+        text-align: center;
+        font-size: $font-size-sm;
+        margin: $spacing-md 0 0;
+    }
+}
+
+// ===== Ajustes de paleta: gris + verde clarito =====
+header {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.hero {
+    background: linear-gradient(135deg, $color-primary-soft 0%, $color-surface-alt 100%);
+    border-radius: $radius-lg;
+    padding: $spacing-xl $spacing-md;
+    box-shadow: $shadow-sm;
+
+    @include from(lg) {
+        padding: $spacing-2xl;
+    }
+}
+
+.page-head {
+    background: $color-surface-alt;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: $spacing-lg $spacing-md;
+}
+
+.section-title {
+    position: relative;
+    padding-bottom: $spacing-sm;
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 48px;
+        height: 4px;
+        border-radius: $radius-full;
+        background: $color-primary;
+    }
+}
+
+.stat-card {
+    border-top: 3px solid $color-primary-light;
+}
+
+// ===== HEADER: verde intenso, todo el ancho y centrado =====
+header {
+    width: 100%;
+    max-width: none;
+    background: $color-primary-dark;
+    border-bottom: none;
+    box-shadow: $shadow-md;
+    justify-content: center;
+
+    .logo {
+        height: 40px;
+        width: auto;
+    }
+
+    nav {
+        width: auto;
+        margin-left: 0;
+        justify-content: center;
+
+        a,
+        span {
+            color: #ffffff;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.18);
+                color: #ffffff;
+            }
+        }
+
+        button {
+            background: #ffffff;
+            color: $color-primary-dark;
+
+            &:hover {
+                background: $color-primary-light;
+                color: $color-primary-dark;
+            }
+        }
+    }
+}
+
+// ===== PERFIL =====
+.profile-card {
+    @include card-base;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+    text-align: center;
+    margin-bottom: $spacing-xl;
+
+    @include from(sm) {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    &__info {
+        flex: 1;
+
+        h1 {
+            margin: 0 0 $spacing-xs;
+            font-size: $font-size-xl;
+        }
+    }
+
+    .avatar {
+        width: 72px;
+        height: 72px;
+        flex-shrink: 0;
+    }
+}
+
+// ===== RESERVA (item) =====
+.reservation-item {
+    text-align: left;
+
+    &__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: $spacing-sm;
+        flex-wrap: wrap;
+
+        h3 { margin: 0; }
+    }
+
+    &__price {
+        font-size: $font-size-xl;
+        font-weight: 800;
+        color: $color-text-heading;
+        margin: $spacing-xs 0;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: $spacing-sm;
+        justify-content: flex-end;
+        flex-wrap: wrap;
         margin-top: $spacing-sm;
     }
 }
 
-// ERRORES
-.error-text {
-    color: $color-danger;
-    font-weight: bold;
+// ===== BADGES =====
+.badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: $radius-full;
+    color: #fff;
+    background: $color-text-light;
+
+    &.is-available,
+    &.is-paid { background: $color-success; }
+    &.is-unavailable { background: $color-text-light; }
+    &.is-pending { background: $color-warning; }
+    &.is-cancelled { background: $color-danger; }
+    &.is-role { background: $color-primary-light; color: $color-primary-dark; }
 }
 
-// AVATAR
-.avatar {
-    border-radius: 50%;
-    width: 128px;
-    height: 128px;
-    object-fit: cover;
+// ===== ADMIN: accesos y acciones =====
+.admin-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+    margin-top: $spacing-lg;
+
+    @include from(sm) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-// WELCOME IMAGE
-.welcome-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: $radius-md;
-    margin-bottom: $spacing-lg;
+.admin-tile {
+    @include card-base;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    text-align: left;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: $shadow-md;
+        text-decoration: none;
+    }
+
+    &__title {
+        font-weight: 700;
+        color: $color-text-heading;
+        font-size: $font-size-lg;
+    }
+
+    &__desc {
+        color: $color-text-light;
+        font-size: $font-size-sm;
+    }
 }
 
-// RESPONSIVE
-@include responsive(md) {
-    header {
-        flex-direction: column;
-        padding: $spacing-md;
-        gap: $spacing-sm;
+.page-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $spacing-md;
+}
 
-        .logo {
-            height: 36px;
-        }
-
-        nav {
-            width: 100%;
-            flex-wrap: wrap;
-
-            ul {
-                gap: $spacing-xs;
-            }
-
-            ul + ul::before {
-                margin-right: $spacing-xs;
-            }
-
-            a, span {
-                font-size: $font-size-xs;
-                padding: $spacing-xs $spacing-sm;
-            }
-        }
-    }
-
-    .card-horizontal {
-        flex-direction: column;
-
-        .card-image {
-            width: 100%;
-            max-height: 200px;
-        }
-
-        .card-content {
-            padding: $spacing-md;
-        }
-
-        .card-avatar {
-            margin: $spacing-md auto 0;
-        }
-    }
-
-    .main-content {
-        padding: $spacing-md;
-    }
+.card-price {
+    font-size: $font-size-lg;
+    font-weight: 700;
+    color: $color-text-heading;
+    margin: $spacing-xs 0;
 }

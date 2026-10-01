@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { authApi } from './api/auth.js'
 
 const AuthContext = createContext();
-const API = import.meta.env.VITE_API_URLBASE;
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -11,12 +11,9 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchMe = async () => {
             try {
-                const res = await fetch(`${API}/auth/me`, { credentials: "include" });
-                const data = await res.json();
-                if (data.ok) {
-                    setUser(data.data);
-                    setIsAuthenticated(true);
-                }
+                const data = await authApi.me();
+                setUser(data.data);
+                setIsAuthenticated(true);
             } catch {
                 // sin sesión
             } finally {
@@ -27,19 +24,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const res = await fetch(`${API}/auth/login`, {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
-
-        const data = await res.json();
-
-        if (!data.ok) {
-            throw new Error(data.msg);
-        }
-
+        const data = await authApi.login(email, password);
         setUser(data.data.user);
         setIsAuthenticated(true);
     };
@@ -51,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await fetch(`${API}/auth/logout`, { method: "POST", credentials: "include" });
+            await authApi.logout();
         } catch {
             // ignorar
         }

@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router'
+import { useParams, useNavigate, Link } from 'react-router'
 import { useFlatpickr } from '../hooks/useFlatpickr'
+import { carsApi } from '../../../api/cars.js'
 import Swal from 'sweetalert2'
+
+const PLACEHOLDER = "https://placehold.co/600x400?text=Sin+imagen"
 
 export const CarDetail = () => {
     const { id } = useParams()
@@ -9,11 +12,12 @@ export const CarDetail = () => {
     const calendarRef = useRef(null)
     const [car, setCar] = useState(null)
     const [selectedRange, setSelectedRange] = useState({ start: null, end: null })
+    const [activeImage, setActiveImage] = useState("")
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URLBASE}/cars/${id}`)
-            .then(r => r.json())
-            .then(d => setCar(d.data))
+        carsApi.get(id)
+            .then((d) => setCar(d.data))
+            .catch(() => setCar(null))
     }, [id])
 
     const disabled = (car?.unavailableDates || []).flatMap(r => {
@@ -48,9 +52,10 @@ export const CarDetail = () => {
         },
     }, [car])
 
-    if (!car) return <p>Cargando...</p>
+    if (!car) return <main className="main-content"><p>Cargando...</p></main>
 
-    const imgUrl = car.imageUrl || "https://placehold.co/300x200?text=Sin+imagen"
+    const images = car.images?.length ? car.images : (car.imageUrl ? [car.imageUrl] : [])
+    const mainImage = activeImage || images[0] || PLACEHOLDER
 
     const days = selectedRange.start && selectedRange.end
         ? Math.round((new Date(selectedRange.end) - new Date(selectedRange.start)) / (1000 * 60 * 60 * 24)) + 1
@@ -66,29 +71,46 @@ export const CarDetail = () => {
     }
 
     return (
-        <>
-            <h1>{car.brand} {car.model}</h1>
-            <div className="card-horizontal">
-                <img src={imgUrl} alt={car.brand} className="card-image" />
-                <div className="card-content">
-                    <h3>{car.brand} {car.model}</h3>
-                    <p>Precio: {car.pricePerDay}€/día</p>
-                    <p>Matrícula: {car.plate}</p>
-                    <p>Categoría: {car.category}</p>
-                    <p>Disponible: {car.available ? "Sí" : "No"}</p>
+        <main className="main-content">
+            <p className="breadcrumb"><Link to="/cars">← Volver al catálogo</Link></p>
+
+            <div className="car-detail">
+                <div className="car-detail__gallery">
+                    <img className="car-detail__main" src={mainImage} alt={`${car.brand} ${car.model}`} />
+                    {images.length > 1 && (
+                        <div className="car-detail__thumbs">
+                            {images.map(url => (
+                                <img
+                                    key={url}
+                                    src={url}
+                                    alt="miniatura"
+                                    className={url === mainImage ? "thumb active" : "thumb"}
+                                    onClick={() => setActiveImage(url)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="car-detail__info">
+                    <span className={`car-detail__badge ${car.available ? 'is-available' : 'is-unavailable'}`}>
+                        {car.available ? 'Disponible' : 'No disponible'}
+                    </span>
+                    <h1>{car.brand} {car.model}</h1>
+                    <p className="car-detail__category">{car.category} · {car.plate}</p>
+                    <p className="car-detail__price">{car.pricePerDay}€<small>/día</small></p>
+
+                    <div className="availability-section">
+                        <h3>Selecciona tus fechas</h3>
+                        <p className="hint">Las fechas en rojo están ocupadas</p>
+                        <input ref={calendarRef} placeholder="Ver disponibilidad" readOnly />
+                        {days > 0 && (
+                            <p className="car-detail__total">{days} días × {car.pricePerDay}€ = <strong>{totalPrice}€</strong></p>
+                        )}
+                        <button className="btn-primary" onClick={goToReserve}>Reservar</button>
+                    </div>
                 </div>
             </div>
-
-            <div className="availability-section">
-                <h3>Disponibilidad</h3>
-                <p>Las fechas en rojo están ocupadas</p>
-                <input ref={calendarRef} placeholder="Ver disponibilidad" readOnly />
-                <br /><br />
-                {days > 0 && (
-                    <p>{days} días x {car.pricePerDay}€ = <strong>{totalPrice}€</strong></p>
-                )}
-                <button className="btn-primary" onClick={goToReserve}>Reservar</button>
-            </div>
-        </>
+        </main>
     )
 }

@@ -1,44 +1,54 @@
 import { useState, useEffect } from 'react'
 import { CardReservation } from '../../components/reservation/CardReservation'
+import { Pagination } from '../../components/Pagination'
+import { reservationsApi } from '../../../../api/reservations.js'
 import Swal from 'sweetalert2'
+
+const PAGE_SIZE = 10
 
 export const AdminReservation = () => {
     const [reservations, setReservations] = useState([])
-
-    const API = import.meta.env.VITE_API_URLBASE
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState(null)
 
     const fetchReservations = async () => {
-        const res = await fetch(`${API}/reservations`, { credentials: "include" })
-        const data = await res.json()
-        if (data.ok) setReservations(data.data)
+        try {
+            const data = await reservationsApi.list({ page, limit: PAGE_SIZE })
+            setReservations(data.data)
+            setPagination(data.pagination)
+        } catch (err) {
+            Swal.fire("Error", err.message, "error")
+        }
     }
 
-    useEffect(() => { fetchReservations() }, [])
+    useEffect(() => { fetchReservations() }, [page])
 
     const handleCancel = async (id) => {
-        const res = await fetch(`${API}/reservations/${id}/cancel`, {
-            method: "PATCH",
-            credentials: "include"
-        })
-        const data = await res.json()
-        if (data.ok) {
+        try {
+            await reservationsApi.cancel(id)
             Swal.fire("Cancelada", "Reserva cancelada", "success")
             fetchReservations()
-        } else {
-            Swal.fire("Error", data.msg || "No se pudo cancelar", "error")
+        } catch (err) {
+            Swal.fire("Error", err.message || "No se pudo cancelar", "error")
         }
     }
 
     return (
         <main className="main-content">
-            <h1>Gestión de Reservas</h1>
+            <header className="page-head">
+                <h1>Reservas</h1>
+                <p>Revisa y cancela reservas</p>
+            </header>
+
             {reservations.length === 0 ? (
-                <p>No hay reservas todavía.</p>
+                <div className="card"><p>No hay reservas todavía.</p></div>
             ) : (
                 reservations.map(r => (
                     <CardReservation key={r._id} reservation={r} onCancel={handleCancel} />
                 ))
             )}
+
+            <Pagination pagination={pagination} onPageChange={setPage} />
         </main>
     )
 }

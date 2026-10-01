@@ -1,32 +1,42 @@
 import { useEffect, useRef, useState } from 'react'
-import { useForm } from '../../hooks/useForm';
-import { useFetch } from '../../hooks/useFetch'
-import { useNavigate } from 'react-router';
-import { useFlatpickr } from '../../../public/hooks/useFlatpickr';
+import { useNavigate } from 'react-router'
+import { useFlatpickr } from '../../../public/hooks/useFlatpickr'
+import { carsApi } from '../../../../api/cars.js'
+import Swal from 'sweetalert2'
 
 export const EditCarForm = ({ id }) => {
-    const { formulario, handleChange, setFormulario } = useForm({})
-    const { getData, isLoading, data } = useFetch()
+    const navigate = useNavigate()
     const formRef = useRef(null)
     const calendarRef = useRef(null)
+    const [formulario, setFormulario] = useState(null)
     const [unavailableDates, setUnavailableDates] = useState([])
-    const navigate = useNavigate()
-
-    const getCar = async () => {
-        const url = import.meta.env.VITE_API_URLBASE;
-        await getData(`${url}/cars/${id}`)
-    }
+    const [gallery, setGallery] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        getCar(id)
-    }, [])
-
-    useEffect(() => {
-        if (data?.data) {
-            setFormulario(data.data)
-            setUnavailableDates(data.data.unavailableDates || [])
+        const load = async () => {
+            try {
+                const data = await carsApi.get(id)
+                const car = data.data
+                setFormulario(car)
+                setUnavailableDates(car.unavailableDates || [])
+                const imgs = car.images?.length
+                    ? car.images
+                    : (car.imageUrl ? [car.imageUrl] : [])
+                setGallery(imgs)
+            } catch (err) {
+                Swal.fire('Error', err.message, 'error')
+            } finally {
+                setIsLoading(false)
+            }
         }
-    }, [data])
+        load()
+    }, [id])
+
+    const handleChange = (ev) => {
+        const { name, value, type, checked } = ev.target
+        setFormulario((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
+    }
 
     const fpInstance = useFlatpickr(calendarRef, {
         mode: "range",
@@ -48,74 +58,86 @@ export const EditCarForm = ({ id }) => {
         setUnavailableDates(prev => prev.filter((_, i) => i !== index))
     }
 
+    const removeImage = (url) => {
+        setGallery(prev => prev.filter(u => u !== url))
+    }
+
     const handleFormSubmit = async (ev) => {
         ev.preventDefault()
-        const apiUrlBase = import.meta.env.VITE_API_URLBASE
         const formData = new FormData(formRef.current)
         formData.set("available", formulario?.available ? "true" : "false")
         formData.set("unavailableDates", JSON.stringify(unavailableDates))
-        await getData(`${apiUrlBase}/cars/${id}`, {
-            method: "PUT",
-            body: formData,
-            credentials: "include"
-        })
-        navigate('/admin/cars')
+        formData.set("keepImages", JSON.stringify(gallery))
+        try {
+            await carsApi.update(id, formData)
+            navigate('/admin/cars')
+        } catch (err) {
+            Swal.fire('Error', err.message, 'error')
+        }
     }
 
+    if (isLoading) return <p>Cargando coche.</p>
+
     return (
-        <>
-            {isLoading && <p>Cargando coche.</p>}
+        <form
+            ref={formRef}
+            id="editCarForm"
+            name="editarCarForm"
+            onSubmit={handleFormSubmit}>
             <div>
-                <form
-                    ref={formRef}
-                    id="editCarForm"
-                    name="editarCarForm"
-                    onSubmit={handleFormSubmit}>
-                    <div>
-                        <label htmlFor="brand">Marca:</label>
-                        <input type="text" id="brand" name="brand" value={formulario?.brand || ''} onChange={handleChange} placeholder="Introducir la marca." />
+                <label htmlFor="brand">Marca:</label>
+                <input type="text" id="brand" name="brand" value={formulario?.brand || ''} onChange={handleChange} placeholder="Introducir la marca." />
 
-                        <label htmlFor="model">Model</label>
-                        <input type="text" id="model" name="model" value={formulario?.model || ''} onChange={handleChange} placeholder="Introducir el modelo." />
+                <label htmlFor="model">Model</label>
+                <input type="text" id="model" name="model" value={formulario?.model || ''} onChange={handleChange} placeholder="Introducir el modelo." />
 
-                        <label htmlFor="category">Categoria:</label>
-                        <select id="category" name="category" value={formulario?.category || ''} onChange={handleChange}>
-                            <option value="turism">Turismo</option>
-                            <option value="van">Furgoneta</option>
-                            <option value="special">Especial</option>
-                        </select>
+                <label htmlFor="category">Categoria:</label>
+                <select id="category" name="category" value={formulario?.category || ''} onChange={handleChange}>
+                    <option value="turism">Turismo</option>
+                    <option value="van">Furgoneta</option>
+                    <option value="special">Especial</option>
+                </select>
 
-                        <label htmlFor="plate">Matricula:</label>
-                        <input type="text" id="plate" name="plate" value={formulario?.plate || ''} onChange={handleChange} placeholder="Introducir la matricula." />
+                <label htmlFor="plate">Matricula:</label>
+                <input type="text" id="plate" name="plate" value={formulario?.plate || ''} onChange={handleChange} placeholder="Introducir la matricula." />
 
-                        <label htmlFor="pricePerDay">Precio por dia:</label>
-                        <input type="number" id="pricePerDay" name="pricePerDay" value={formulario?.pricePerDay || ''} onChange={handleChange} placeholder="Introducir precio por dia." />
+                <label htmlFor="pricePerDay">Precio por dia:</label>
+                <input type="number" id="pricePerDay" name="pricePerDay" value={formulario?.pricePerDay || ''} onChange={handleChange} placeholder="Introducir precio por dia." />
 
-                        <label htmlFor="image">Imagen:</label>
-                        <input type="file" id="image" name="image" accept="image/*" />
+                <label htmlFor="available">Disponibilidad:</label>
+                <input type="checkbox" id="available" name="available" value="true" checked={formulario?.available || false} onChange={handleChange} />
 
-                        <label htmlFor="available">Disponibilidad:</label>
-                        <input type="checkbox" id="available" name="available" value="true" checked={formulario?.available || false} onChange={handleChange} />
+                <hr />
+                <h3>Imágenes actuales</h3>
+                {gallery.length === 0 && <p>No hay imágenes</p>}
+                <div className="image-gallery">
+                    {gallery.map(url => (
+                        <div key={url} className="image-thumb">
+                            <img src={url} alt="coche" />
+                            <button type="button" className="btn-danger btn-sm" onClick={() => removeImage(url)}>X</button>
+                        </div>
+                    ))}
+                </div>
+                <label htmlFor="images">Añadir imágenes:</label>
+                <input type="file" id="images" name="images" accept="image/*" multiple />
 
-                        <hr />
-                        <h3>Fechas no disponibles</h3>
-                        {unavailableDates.length === 0 && <p>No hay fechas bloqueadas</p>}
-                        <ul className="date-range-list">
-                            {unavailableDates.map((r, i) => (
-                                <li key={i}>
-                                    {new Date(r.start).toLocaleDateString()} - {new Date(r.end).toLocaleDateString()}
-                                    <button type="button" className="btn-danger btn-sm" onClick={() => removeDateRange(i)}>X</button>
-                                </li>
-                            ))}
-                        </ul>
-                        <input ref={calendarRef} placeholder="Seleccionar rango de fechas" readOnly />
-                        <button type="button" className="btn-accent btn-sm" onClick={addDateRange}>Añadir rango</button>
-                        <hr />
+                <hr />
+                <h3>Fechas no disponibles</h3>
+                {unavailableDates.length === 0 && <p>No hay fechas bloqueadas</p>}
+                <ul className="date-range-list">
+                    {unavailableDates.map((r, i) => (
+                        <li key={i}>
+                            {new Date(r.start).toLocaleDateString()} - {new Date(r.end).toLocaleDateString()}
+                            <button type="button" className="btn-danger btn-sm" onClick={() => removeDateRange(i)}>X</button>
+                        </li>
+                    ))}
+                </ul>
+                <input ref={calendarRef} placeholder="Seleccionar rango de fechas" readOnly />
+                <button type="button" className="btn-accent btn-sm" onClick={addDateRange}>Añadir rango</button>
+                <hr />
 
-                        <input type="submit" value="Guardar" />
-                    </div>
-                </form>
+                <input type="submit" value="Guardar" />
             </div>
-        </>
+        </form>
     )
 }

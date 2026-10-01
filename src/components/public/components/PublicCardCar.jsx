@@ -1,22 +1,25 @@
-import React from 'react'
 import { useNavigate } from 'react-router'
 
 export const PublicCardCar = ({ car }) => {
     const navigate = useNavigate()
-    const imgUrl = car.imageUrl || "https://placehold.co/300x200?text=Sin+imagen"
+    const imgUrl = car.imageUrl || "https://placehold.co/400x260?text=Sin+imagen"
+
     return (
-        <div className="card-horizontal">
-            <img src={imgUrl} alt={car.brand} className="card-image" />
-            <div className="card-content">
+        <article className="car-card">
+            <div className="car-card__image">
+                <img src={imgUrl} alt={`${car.brand} ${car.model}`} />
+                <span className={`car-card__badge ${car.available ? 'is-available' : 'is-unavailable'}`}>
+                    {car.available ? 'Disponible' : 'No disponible'}
+                </span>
+            </div>
+            <div className="car-card__body">
                 <h3>{car.brand} {car.model}</h3>
-                <p>Mari-Matrícula: {car.plate}</p>
-                <p>Mari-Categoría: {car.category}</p>
-                <p>Mari-Precio: {car.pricePerDay}€ / día</p>
-                <p>Disponible: {car.available ? "Sí" : "No"}</p>
-                <div className="card-actions">
-                    <button onClick={() => navigate(`/car/${car._id}`)}>Reservar</button>
+                <p className="car-card__meta">{car.category} · {car.plate}</p>
+                <div className="car-card__footer">
+                    <span className="car-card__price">{car.pricePerDay}€<small>/día</small></span>
+                    <button className="btn-primary btn-sm" onClick={() => navigate(`/car/${car._id}`)}>Reservar</button>
                 </div>
             </div>
-        </div>
+        </article>
     )
 }

@@ -6,7 +6,7 @@
     --color-primary-dark: #{$color-primary-dark};
     --color-primary-light: #{$color-primary-light};
     --color-bg: #{$color-bg};
-    --color-bg-card: #{$color-bg-card};
+    --color-surface: #{$color-surface};
     --color-text: #{$color-text};
     --color-text-light: #{$color-text-light};
     --color-text-heading: #{$color-text-heading};
@@ -15,19 +15,29 @@
     --color-success: #{$color-success};
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: $font-family;
     background: $color-bg;
     color: $color-text;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+    color: $color-text-heading;
+    line-height: 1.2;
+    margin-top: 0;
 }
 
 #root {
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
     min-height: 100vh;
     @include flex-column;
-    background: $color-bg;
 }

@@ -5,14 +5,10 @@ export const CardReservation = ({ reservation, onCancel }) => {
     const user = r.user
     const car = r.car
 
-    const statusBadge = (status) => {
-        const styles = {
-            pending: { backgroundColor: "#f59e0b", color: "#fff" },
-            paid: { backgroundColor: "#10b981", color: "#fff" },
-            cancelled: { backgroundColor: "#ef4444", color: "#fff" },
-        }
-        const labels = { pending: "Pendiente", paid: "Pagada", cancelled: "Cancelada" }
-        return <span style={{ ...styles[status], padding: "4px 10px", borderRadius: "12px", fontSize: "0.85rem" }}>{labels[status]}</span>
+    const statusInfo = {
+        pending: { label: 'Pendiente', cls: 'is-pending' },
+        paid: { label: 'Pagada', cls: 'is-paid' },
+        cancelled: { label: 'Cancelada', cls: 'is-cancelled' },
     }
 
     const handleCancel = async () => {
@@ -28,19 +24,19 @@ export const CardReservation = ({ reservation, onCancel }) => {
     }
 
     return (
-        <div className="card-horizontal">
-            <div className="card-content">
+        <article className="card reservation-item">
+            <div className="reservation-item__head">
                 <h3>{car?.brand} {car?.model}</h3>
-                <p>Cliente: {user?.name} {user?.surname || ""} · {user?.email}</p>
-                <p>Del {new Date(r.startDate).toLocaleDateString()} al {new Date(r.endDate).toLocaleDateString()}</p>
-                <p>{r.days} días · {r.totalPrice}€</p>
-                {statusBadge(r.status)}
-                {r.status === "paid" && (
-                    <div className="card-actions">
-                        <button className="btn-danger" onClick={handleCancel}>Cancelar reserva</button>
-                    </div>
-                )}
+                <span className={`badge ${statusInfo[r.status]?.cls || ''}`}>{statusInfo[r.status]?.label || r.status}</span>
             </div>
-        </div>
+            <p className="hint">Cliente: {user?.name} {user?.surname || ""} · {user?.email}</p>
+            <p className="hint">Del {new Date(r.startDate).toLocaleDateString()} al {new Date(r.endDate).toLocaleDateString()} · {r.days} días</p>
+            <p className="reservation-item__price">{r.totalPrice}€</p>
+            {r.status === "paid" && (
+                <div className="card-actions">
+                    <button className="btn-danger btn-sm" onClick={handleCancel}>Cancelar reserva</button>
+                </div>
+            )}
+        </article>
     )
 }

@@ -1,46 +1,39 @@
-import React, { useEffect } from 'react'
-import { Link } from 'react-router'
-import { useFetch } from '../../hooks/useFetch'
+import { useEffect, useState } from 'react'
+import { carsApi } from '../../../../api/cars.js'
 import { CardCar } from './CardCar'
 
 export const CarContainer = () => {
-  const { getData, data, isLoading, error } = useFetch()
-  const llamadaApi = async () => {
-    const url = import.meta.env.VITE_API_URLBASE
-    await getData(`${url}/cars`)
-  }
+  const [cars, setCars] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
 
+  const llamadaApi = async () => {
+    setIsLoading(true)
+    try {
+      const data = await carsApi.list()
+      setCars(data.data || [])
+      setError(null)
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
-      llamadaApi()    
-  }, [])
-  const onDelete =()=>{
     llamadaApi()
-  }
+  }, [])
+
+  if (isLoading) return <p>Cargando Mari-coches</p>
+  if (error) return <p className="error-text">{error}</p>
+
   return (
     <>
-      {isLoading ?
-        (
-          <p>Cargando Mari-coches</p>
-        )
-        :
-        error
-          ?
-          (
-            <pre>ERROR: {JSON.stringify(error)}</pre>
-          )
-          :
-          (
-            data.data.map((car) => (
-              <div key={car._id}>
-                <CardCar car={car} onDelete={onDelete} />
-              </div>
-            ))
-          )
-
-
-      }
+      {cars.map((car) => (
+        <div key={car._id}>
+          <CardCar car={car} onDelete={llamadaApi} />
+        </div>
+      ))}
     </>
-    //<p>{JSON.stringify(data)}</p>
   )
 }
